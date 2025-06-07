@@ -1,107 +1,192 @@
-<!DOCTYPE html><html lang="th">
+<!DOCTYPE html>
+<html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>เว็บรวมหมวดหมู่: Free TV | ดูบอล | แจกเน็ต VPN</title>
+  <title>แจกเน็ต VPN และ Free TV</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
     body {
-      font-family: 'Kanit', sans-serif;
-      background: #121212;
-      color: white;
       margin: 0;
       padding: 0;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      font-family: 'Kanit', sans-serif;
+      color: white;
     }
-    h2 {
-      background: #1f1f1f;
+    h1, h2 {
+      text-align: center;
+      padding: 20px 10px 10px;
+    }
+    .section-title {
+      background: rgba(255,255,255,0.05);
       padding: 15px;
-      margin: 0;
-    }
-    iframe {
-      width: 100%;
-      height: 300px;
-      border: none;
-      display: block;
-      background: black;
-    }
-    .section {
-      padding: 20px;
-    }
-    .channel-btn {
-      background: none;
-      border: none;
-      margin: 5px;
-      cursor: pointer;
-    }
-    .channel-btn img {
-      width: 80px;
-      border-radius: 10px;
-    }
-    .vpn-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 20px;
-      padding: 10px;
-    }
-    .vpn-card {
-      background: #1e1e1e;
-      border-radius: 10px;
-      padding: 15px;
+      font-size: 24px;
+      margin-top: 40px;
       text-align: center;
     }
-    .vpn-card img {
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .card img {
       width: 80px;
+      height: auto;
       margin-bottom: 10px;
     }
     .btn {
       display: inline-block;
       background: #00c853;
-      padding: 8px 14px;
-      border-radius: 8px;
-      color: white;
-      text-decoration: none;
+      padding: 10px 15px;
       margin-top: 10px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: white;
+      font-size: 16px;
+    }
+    .btn:hover {
+      background: #00e676;
+    }
+    .video-container {
+      max-width: 900px;
+      margin: auto;
+      box-shadow: 0 0 15px #ff6600;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .channel-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .channel-info .logo {
+      width: 40px;
+      height: auto;
+    }
+    .channel-info h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+    video {
+      width: 100%;
+      border-radius: 0 0 10px 10px;
+    }
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 15px;
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+    .logo-grid a img {
+      width: 100%;
+      border-radius: 10px;
+      transition: transform 0.3s;
+    }
+    .logo-grid a img:hover {
+      transform: scale(1.1);
+    }
+    .support, .footer {
+      text-align: center;
+      margin: 30px 20px;
+      color: #ccc;
+    }
+    .support .btn {
+      background: #ff4081;
+    }
+    .support .btn:hover {
+      background: #f06292;
     }
   </style>
+</head>
+<body>
+
+  <h1><i class="fa-solid fa-globe"></i> แจกเน็ต VPN และ Free TV</h1>
+
+  <!-- SECTION 1: แจกเน็ต VPN -->
+  <div class="section-title">📶 แจกเน็ต VPN ฟรี</div>
+  <div class="grid-container">
+    <div class="card">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/AIS_logo_2022.svg" alt="AIS">
+      <h2>AIS VPN</h2>
+      <p>เน็ตฟรี AIS สำหรับ VPN</p>
+      <a href="https://example.com/ais.vpn" class="btn" download><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>
+    </div>
+    <div class="card">
+      <img src="https://upload.wikimedia.org/wikipedia/en/2/2f/True_Corporation_logo.svg" alt="TRUE">
+      <h2>TRUE VPN</h2>
+      <p>เน็ต TRUE ใช้กับ VPN ได้</p>
+      <a href="https://example.com/true.vpn" class="btn" download><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>
+    </div>
+    <div class="card">
+      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/DTAC_Logo.svg" alt="DTAC">
+      <h2>DTAC VPN</h2>
+      <p>เน็ตฟรี DTAC ใช้ VPN เท่านั้น</p>
+      <a href="https://example.com/dtac.vpn" class="btn" download><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>
+    </div>
+    <div class="card">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/My_by_CAT_logo.svg/1200px-My_by_CAT_logo.svg.png" alt="My by CAT">
+      <h2>MY VPN</h2>
+      <p>VPN สำหรับเครือข่าย my by CAT</p>
+      <a href="https://example.com/my.vpn" class="btn" download><i class="fa-solid fa-download"></i> ดาวน์โหลด</a>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Free TV -->
+  <div class="section-title">📺 Free TV ดูทีวีออนไลน์</div>
+  <div class="video-container">
+    <div class="channel-info" id="channelInfo">
+      <img id="channelLogo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Thai_TV3_Logo.svg/120px-Thai_TV3_Logo.svg.png" alt="โลโก้ช่อง" class="logo">
+      <h3 id="channelName">ช่อง 3 HD</h3>
+    </div>
+    <video id="mainPlayer" controls autoplay>
+      <source id="mainSource" src="https://lb1-live-mv.v2h-cdn.com/hls/ffae/3hd/3hd.m3u8" type="application/x-mpegURL">
+      ไม่สามารถเล่นวิดีโอได้
+    </video>
+  </div>
+
+  <div class="support">
+    <h2>💖 สนับสนุนค่าเซิร์ฟเวอร์</h2>
+    <p>อยากให้เว็บอยู่นานๆ สนับสนุนได้ครับ!</p>
+    <a href="https://tmn.app.link/your-link" class="btn"><i class="fa-solid fa-heart"></i> สนับสนุนผ่าน TrueMoney</a>
+  </div>
+
+  <div class="footer">
+    © 2025 จัดทำโดยคุณอ้าย
+  </div>
+
   <script>
-    function changeChannel(playerId, url) {
-      document.getElementById(playerId).src = url;
+    function changeChannel(link, name, logo) {
+      const player = document.getElementById('mainPlayer');
+      const source = document.getElementById('mainSource');
+      const channelName = document.getElementById('channelName');
+      const channelLogo = document.getElementById('channelLogo');
+
+      source.src = link;
+      channelName.textContent = name;
+      channelLogo.src = logo;
+      player.load();
+      player.play();
     }
   </script>
-</head>
-<body>  <!-- หมวดที่ 1: Free TV -->  <h2>📺 หมวดที่ 1: Free TV</h2>
-  <div class="section">
-    <iframe id="tvPlayer" src="https://example.com/starttv.m3u8"></iframe>
-    <button class="channel-btn" onclick="changeChannel('tvPlayer','https://yourdomain.com/stream/tv3.m3u8')">
-      <img src="https://upload.wikimedia.org/wikipedia/en/9/99/Thai_TV3_2021_logo.svg" alt="ช่อง 3">
-    </button>
-    <button class="channel-btn" onclick="changeChannel('tvPlayer','https://yourdomain.com/stream/mcot.m3u8')">
-      <img src="https://upload.wikimedia.org/wikipedia/en/e/e5/MCOT_HD_Logo_2020.png" alt="MCOT">
-    </button>
-  </div>  <!-- หมวดที่ 2: ดูบอลฟรี -->  <h2>⚽ หมวดที่ 2: ดูบอลฟรี</h2>
-  <div class="section">
-    <iframe id="ballPlayer" src="https://example.com/startball.m3u8"></iframe>
-    <button class="channel-btn" onclick="changeChannel('ballPlayer','https://yourdomain.com/stream/bein1.m3u8')">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Bein_sports_logo.png" alt="beIN 1">
-    </button>
-    <button class="channel-btn" onclick="changeChannel('ballPlayer','https://yourdomain.com/stream/tsport.m3u8')">
-      <img src="https://upload.wikimedia.org/wikipedia/en/f/f7/T_Sports_Logo_2021.png" alt="T Sports">
-    </button>
-  </div>  <!-- หมวดที่ 3: แจกเน็ต VPN -->  <h2>🌐 หมวดที่ 3: แจกเน็ต VPN</h2>
-  <div class="vpn-grid">
-    <div class="vpn-card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/AIS_logo_2022.svg" alt="AIS">
-      <a href="https://yourdomain.com/files/ais.vpn" class="btn" download>ดาวน์โหลด AIS</a>
-    </div>
-    <div class="vpn-card">
-      <img src="https://upload.wikimedia.org/wikipedia/en/2/2f/True_Corporation_logo.svg" alt="TRUE">
-      <a href="https://yourdomain.com/files/true.vpn" class="btn" download>ดาวน์โหลด TRUE</a>
-    </div>
-    <div class="vpn-card">
-      <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/DTAC_Logo.svg" alt="DTAC">
-      <a href="https://yourdomain.com/files/dtac.vpn" class="btn" download>ดาวน์โหลด DTAC</a>
-    </div>
-    <div class="vpn-card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/My_by_CAT_logo.svg" alt="MY">
-      <a href="https://yourdomain.com/files/my.vpn" class="btn" download>ดาวน์โหลด MY</a>
-    </div>
-  </div></body>
+
+</body>
 </html>
