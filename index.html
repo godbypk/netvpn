@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Gold Mine Idle Game</title>
+  <title>Gold Mine P2E</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -29,44 +28,35 @@
     }
   </style>
 </head>
-<body>
-
-  <h1>⛏️ Gold Mine Idle</h1>
-  <h2>💰 ทอง: <span id="gold">0</span></h2>
-  <h4>🎯 โบนัสถาวร: <span id="bonus">0</span>%</h4>
-
-  <button id="mineBtn">ขุดทอง! (+<span id="goldPerClick">1</span>)</button>
+<body>  <h1>⛏️ Gold Mine Idle P2E</h1>
+  <h2>💰 Coin: <span id="gold">0</span></h2>
+  <h4>🎯 Bonus: <span id="bonus">0</span>%</h4><button id="mineBtn">ขุดทอง! (+<span id="goldPerClick">1</span>)</button>
 
   <div>
     <h3>🛠️ อัปเกรดเครื่องมือ</h3>
     <button class="upgrade" id="upgradeTool">อัปเกรด (ราคา: <span id="toolCost">10</span>)</button>
     <p>ทองต่อคลิก: <span id="goldPerClickLabel">1</span></p>
-  </div>
-
-  <div>
+  </div>  <div>
     <h3>👷‍♂️ จ้างคนงาน</h3>
     <button class="character" id="hireWorker">จ้าง (ราคา: <span id="workerCost">50</span>)</button>
     <p>คนงาน: <span id="workers">0</span> ⏱️ ทอง/วินาที: <span id="gps">0</span></p>
-  </div>
-
-  <div id="characters">
+  </div>  <div id="characters">
     <h3>🧍‍♂️ ตัวละครของคุณ</h3>
     <div id="characterList"></div>
-  </div>
-
-  <div>
+  </div>  <div>
     <h3>💳 เติมเงินจริง (จำลอง)</h3>
     <button class="buy-btn" onclick="buyGold(100)">ซื้อทอง +100 (10 บาท)</button>
     <button class="buy-btn" onclick="buyUpgrade()">ซื้ออัปเกรดทันที (30 บาท)</button>
-  </div>
-
-  <div>
+  </div>  <div>
     <h3>🔥 Prestige</h3>
     <button class="prestige-btn" id="prestigeBtn">เริ่มใหม่พร้อมโบนัส (ต้องมีทอง ≥ 1000)</button>
-  </div>
-
-  <script>
-    // ค่าเกมหลัก
+  </div>  <div>
+    <h3>💸 แลก Coin เป็นเงินจริง</h3>
+    <p>อัตราแลกเปลี่ยนวันนี้: <span id="rate">0.10</span> THB / Coin</p>
+    <input id="redeemAmount" type="number" placeholder="จำนวน Coin ที่จะแลก">
+    <button onclick="redeemCoin()">ขอแลกเงิน</button>
+    <p id="redeemMsg"></p>
+  </div>  <script>
     let gold = 0;
     let goldPerClick = 1;
     let toolLevel = 1;
@@ -77,8 +67,9 @@
     let goldPerSecond = 0;
 
     let prestigeBonus = 0;
+    let totalCoinRedeemedToday = 0;
+    let maxTHBPayoutPerDay = 1000;
 
-    // อ้างอิง DOM
     const goldDisplay = document.getElementById("gold");
     const goldPerClickLabel = document.getElementById("goldPerClickLabel");
     const goldPerClickSpan = document.getElementById("goldPerClick");
@@ -88,13 +79,12 @@
     const gpsSpan = document.getElementById("gps");
     const bonusSpan = document.getElementById("bonus");
     const characterList = document.getElementById("characterList");
+    const rateDisplay = document.getElementById("rate");
 
-    // ฟังก์ชันเพิ่มทองพร้อมโบนัส
     function applyBonus(value) {
       return Math.floor(value * (1 + prestigeBonus / 100));
     }
 
-    // ฟังก์ชันอัปเดตหน้าจอ
     function updateDisplay() {
       goldDisplay.textContent = gold;
       goldPerClickLabel.textContent = goldPerClick;
@@ -104,15 +94,14 @@
       workersSpan.textContent = workers;
       gpsSpan.textContent = goldPerSecond;
       bonusSpan.textContent = prestigeBonus;
+      rateDisplay.textContent = getExchangeRate().toFixed(2);
     }
 
-    // ปุ่มขุดทอง
     document.getElementById("mineBtn").onclick = () => {
       gold += applyBonus(goldPerClick);
       updateDisplay();
     };
 
-    // อัปเกรดเครื่องมือ
     document.getElementById("upgradeTool").onclick = () => {
       if (gold >= toolCost) {
         gold -= toolCost;
@@ -123,7 +112,6 @@
       }
     };
 
-    // จ้างคนงาน
     document.getElementById("hireWorker").onclick = () => {
       if (gold >= workerCost) {
         gold -= workerCost;
@@ -135,7 +123,6 @@
       }
     };
 
-    // แสดงภาพตัวละคร
     function showCharacterImage(index) {
       const img = document.createElement("img");
       img.src = `https://placehold.co/80x80?text=Worker+${index}`;
@@ -144,7 +131,6 @@
       characterList.appendChild(img);
     }
 
-    // เติมเงินจริง (จำลอง)
     function buyGold(amount) {
       gold += amount;
       alert("ขอบคุณที่สนับสนุน!");
@@ -157,7 +143,6 @@
       updateDisplay();
     }
 
-    // Prestige
     document.getElementById("prestigeBtn").onclick = () => {
       if (gold >= 1000) {
         prestigeBonus += 10;
@@ -176,18 +161,38 @@
       }
     };
 
-    // เพิ่มทองอัตโนมัติ
+    function getExchangeRate() {
+      const baseRate = 0.1;
+      const multiplier = Math.max(1 - (totalCoinRedeemedToday / maxTHBPayoutPerDay), 0.3);
+      return baseRate * multiplier;
+    }
+
+    function redeemCoin() {
+      const amount = parseInt(document.getElementById("redeemAmount").value);
+      const rate = getExchangeRate();
+      if (isNaN(amount) || amount <= 0) return alert("กรุณากรอกจำนวนที่ถูกต้อง");
+      if (gold >= amount) {
+        const thb = (amount * rate).toFixed(2);
+        gold -= amount;
+        totalCoinRedeemedToday += parseFloat(thb);
+        document.getElementById("redeemMsg").textContent =
+          `คุณขอแลก ${amount} Coin เป็น ${thb} บาท (รอดำเนินการ)`;
+        updateDisplay();
+      } else {
+        alert("Coin ไม่พอ");
+      }
+    }
+
     setInterval(() => {
       gold += applyBonus(goldPerSecond);
       updateDisplay();
     }, 1000);
 
-    // ระบบเซฟ/โหลดอัตโนมัติ
     function saveGame() {
       const saveData = {
         gold, goldPerClick, toolLevel, toolCost,
         workers, workerCost, goldPerSecond,
-        prestigeBonus
+        prestigeBonus, totalCoinRedeemedToday
       };
       localStorage.setItem("goldMineSave", JSON.stringify(saveData));
     }
@@ -204,14 +209,13 @@
         workerCost = data.workerCost ?? 50;
         goldPerSecond = data.goldPerSecond ?? 0;
         prestigeBonus = data.prestigeBonus ?? 0;
+        totalCoinRedeemedToday = data.totalCoinRedeemedToday ?? 0;
         for (let i = 1; i <= workers; i++) showCharacterImage(i);
       }
     }
 
     loadGame();
     updateDisplay();
-    setInterval(saveGame, 10000); // บันทึกทุก 10 วิ
-
-  </script>
-</body>
+    setInterval(saveGame, 10000);
+  </script></body>
 </html>
