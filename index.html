@@ -1,55 +1,117 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ประกาศย้ายเว็บไซต์</title>
+  <title>Gold Mine Idle Game</title>
   <style>
     body {
-      font-family: 'Kanit', sans-serif;
-      background: linear-gradient(to right, #ff6a00, #222);
-      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #2c3e50;
+      color: #ecf0f1;
       text-align: center;
-      padding: 40px 20px;
-    }
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: rgba(0,0,0,0.4);
       padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
+    button {
+      font-size: 16px;
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+      border-radius: 10px;
+      border: none;
     }
-    p {
-      font-size: 1.1rem;
-      margin: 10px 0 20px;
+    #mineBtn {
+      background-color: #f1c40f;
+      color: #2c3e50;
     }
-    a.button {
-      display: inline-block;
-      background-color: #ff6a00;
+    .upgrade, .character {
+      background-color: #3498db;
       color: white;
-      padding: 12px 25px;
-      border-radius: 30px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-    a.button:hover {
-      background-color: #ff8800;
     }
   </style>
-  <link href="https://pronetfree.cyber-safe.pro/" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <h1>เว็บไซต์นี้ได้ย้ายแล้ว</h1>
-    <p>ขอแจ้งให้ทราบว่าเว็บไซต์ <strong>HEE TEE VPN TV</strong> ได้ทำการย้ายไปยังเว็บไซต์ใหม่แล้ว</p>
-    <p>กรุณาคลิกปุ่มด้านล่างเพื่อไปยังเว็บไซต์ใหม่ของเรา</p>
-    <a class="button" href="https://pronetfree.cyber-safe.pro/" target="_blank">ไปยังเว็บไซต์ใหม่</a>
+
+  <h1>⛏️ Gold Mine Idle</h1>
+  <h2>💰 Gold: <span id="gold">0</span></h2>
+
+  <button id="mineBtn">ขุดทอง! (+<span id="goldPerClick">1</span>)</button>
+
+  <div>
+    <h3>🛠️ อัปเกรดเครื่องมือ</h3>
+    <button class="upgrade" id="upgradeTool">อัปเกรด (ราคา: <span id="toolCost">10</span>)</button>
+    <p>ทองต่อคลิก: <span id="goldPerClickLabel">1</span></p>
   </div>
+
+  <div>
+    <h3>👷‍♂️ ปลดล็อกตัวละคร</h3>
+    <button class="character" id="hireWorker">จ้างคนงาน (ราคา: <span id="workerCost">50</span>)</button>
+    <p>คนงาน: <span id="workers">0</span> ⏱️ ทอง/วินาที: <span id="gps">0</span></p>
+  </div>
+
+  <script>
+    let gold = 0;
+    let goldPerClick = 1;
+    let toolLevel = 1;
+    let toolCost = 10;
+
+    let workers = 0;
+    let workerCost = 50;
+    let goldPerSecond = 0;
+
+    const goldDisplay = document.getElementById("gold");
+    const mineBtn = document.getElementById("mineBtn");
+    const goldPerClickLabel = document.getElementById("goldPerClickLabel");
+    const goldPerClickSpan = document.getElementById("goldPerClick");
+
+    const upgradeToolBtn = document.getElementById("upgradeTool");
+    const toolCostSpan = document.getElementById("toolCost");
+
+    const hireWorkerBtn = document.getElementById("hireWorker");
+    const workerCostSpan = document.getElementById("workerCost");
+    const workersSpan = document.getElementById("workers");
+    const gpsSpan = document.getElementById("gps");
+
+    mineBtn.onclick = () => {
+      gold += goldPerClick;
+      updateDisplay();
+    };
+
+    upgradeToolBtn.onclick = () => {
+      if (gold >= toolCost) {
+        gold -= toolCost;
+        toolLevel++;
+        goldPerClick++;
+        toolCost = Math.floor(toolCost * 1.5);
+        updateDisplay();
+      }
+    };
+
+    hireWorkerBtn.onclick = () => {
+      if (gold >= workerCost) {
+        gold -= workerCost;
+        workers++;
+        goldPerSecond = workers;
+        workerCost = Math.floor(workerCost * 1.5);
+        updateDisplay();
+      }
+    };
+
+    function updateDisplay() {
+      goldDisplay.textContent = gold;
+      goldPerClickLabel.textContent = goldPerClick;
+      goldPerClickSpan.textContent = goldPerClick;
+      toolCostSpan.textContent = toolCost;
+      workersSpan.textContent = workers;
+      gpsSpan.textContent = goldPerSecond;
+      workerCostSpan.textContent = workerCost;
+    }
+
+    // เพิ่มทองอัตโนมัติทุกวินาที
+    setInterval(() => {
+      gold += goldPerSecond;
+      updateDisplay();
+    }, 1000);
+  </script>
+
 </body>
 </html>
