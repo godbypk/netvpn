@@ -1,221 +1,75 @@
-<!DOCTYPE html><html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Gold Mine P2E</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #1e272e;
-      color: #f5f6fa;
-      text-align: center;
-      padding: 30px;
+<?php
+/**
+ * @filesource modules/demo/views/promptpay.php
+ *
+ * @copyright 2024 Goragod.com
+ * @license https://www.kotchasan.com/license/
+ *
+ * @see https://www.kotchasan.com/
+ */
+
+namespace Demo\Promptpay;
+
+use Kotchasan\Currency;
+use Kotchasan\Html;
+use Kotchasan\Http\Request;
+
+/**
+ * module=demo-promptpay
+ *
+ * @author Goragod Wiriya <admin@goragod.com>
+ *
+ * @since 1.0
+ */
+class View extends \Gcms\View
+{
+    /**
+     * ตัวอย่างฟอร์ม
+     *
+     * @return string
+     */
+    public function render(Request $request)
+    {
+        /* สร้าง DIV */
+        $div = Html::create('div', [
+            'class' => 'setup_frm'
+        ]);
+        $fieldset = $div->add('fieldset', [
+            'title' => 'Prompt Pay QR Code'
+        ]);
+        // ชื่อผู้รับเงิน
+        $name = 'กรกฎ วิริยะ';
+        // เบอร์โทร
+        $promptpay_id = '660868142004';
+        // จำนวนเงิน
+        $amount = 999;
+        /*
+        สร้าง payload สำหรับ Prompt Pay
+        ผู้รับเงิน เบอร์โทรศัพท์ (+66)0868142004
+        หรือ เลขบัตรประชาชน 13 หลัก
+        และ จำนวนเงินที่ต้องชำระ (999)
+        ถ้าไม่ระบุจำนวนเงิน จะสร้าง QR Code สำหรับรับชำระเงินได้หลายครั้งโดยกรอกจำนวนเงินเอง
+         */
+        $promptpay = \Kotchasan\Promptpay::create($promptpay_id, $amount);
+        // payload สำหรับนำไปสร้าง QR Code
+        $payload = $promptpay->payload();
+        // สร้าง QR Code จากบริการของ quickchart.io ขนาด 300*300 พิกเซล
+        $qr = 'https://quickchart.io/chart?cht=qr&chs=300x300&chl='.$payload;
+        // แสดงผล QR Code
+        $card = '<article class=qrpayment>';
+        $card .= '<header><img src="'.WEB_URL.'modules/demo/img/thaiqrpayment.png" alt="Prompt Pay"></header>';
+        $card .= '<img src="'.WEB_URL.'modules/demo/img/promptpay.png" alt="Prompt Pay" class=promptpay>';
+        $card .= '<img src="'.$qr.'" alt="QR Code" class=qr>';
+        $card .= '<footer>';
+        $card .= '<div><small>ผู้รับเงิน</small>'.$name.'</div>';
+        $card .= '<div><small>จำนวนเงิน</small>'.Currency::format($amount).' บาท</div>';
+        $card .= '</footer>';
+        $card .= '</article>';
+        // แสดงผล QR
+        $fieldset->add('div', [
+            'innerHTML' => $card
+        ]);
+        // คืนค่า HTML
+        return $div->render();
     }
-    button {
-      font-size: 16px;
-      padding: 10px 20px;
-      margin: 10px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-    }
-    #mineBtn { background-color: #f1c40f; color: #2c3e50; }
-    .upgrade, .character, .buy-btn, .prestige-btn { background-color: #2980b9; color: white; }
-    img.character-img {
-      width: 80px;
-      margin: 5px;
-      border-radius: 10px;
-      border: 2px solid #fff;
-    }
-  </style>
-</head>
-<body>  <h1>⛏️ Gold Mine Idle P2E</h1>
-  <h2>💰 Coin: <span id="gold">0</span></h2>
-  <h4>🎯 Bonus: <span id="bonus">0</span>%</h4><button id="mineBtn">ขุดทอง! (+<span id="goldPerClick">1</span>)</button>
-
-  <div>
-    <h3>🛠️ อัปเกรดเครื่องมือ</h3>
-    <button class="upgrade" id="upgradeTool">อัปเกรด (ราคา: <span id="toolCost">10</span>)</button>
-    <p>ทองต่อคลิก: <span id="goldPerClickLabel">1</span></p>
-  </div>  <div>
-    <h3>👷‍♂️ จ้างคนงาน</h3>
-    <button class="character" id="hireWorker">จ้าง (ราคา: <span id="workerCost">50</span>)</button>
-    <p>คนงาน: <span id="workers">0</span> ⏱️ ทอง/วินาที: <span id="gps">0</span></p>
-  </div>  <div id="characters">
-    <h3>🧍‍♂️ ตัวละครของคุณ</h3>
-    <div id="characterList"></div>
-  </div>  <div>
-    <h3>💳 เติมเงินจริง (จำลอง)</h3>
-    <button class="buy-btn" onclick="buyGold(100)">ซื้อทอง +100 (10 บาท)</button>
-    <button class="buy-btn" onclick="buyUpgrade()">ซื้ออัปเกรดทันที (30 บาท)</button>
-  </div>  <div>
-    <h3>🔥 Prestige</h3>
-    <button class="prestige-btn" id="prestigeBtn">เริ่มใหม่พร้อมโบนัส (ต้องมีทอง ≥ 1000)</button>
-  </div>  <div>
-    <h3>💸 แลก Coin เป็นเงินจริง</h3>
-    <p>อัตราแลกเปลี่ยนวันนี้: <span id="rate">0.10</span> THB / Coin</p>
-    <input id="redeemAmount" type="number" placeholder="จำนวน Coin ที่จะแลก">
-    <button onclick="redeemCoin()">ขอแลกเงิน</button>
-    <p id="redeemMsg"></p>
-  </div>  <script>
-    let gold = 0;
-    let goldPerClick = 1;
-    let toolLevel = 1;
-    let toolCost = 10;
-
-    let workers = 0;
-    let workerCost = 50;
-    let goldPerSecond = 0;
-
-    let prestigeBonus = 0;
-    let totalCoinRedeemedToday = 0;
-    let maxTHBPayoutPerDay = 1000;
-
-    const goldDisplay = document.getElementById("gold");
-    const goldPerClickLabel = document.getElementById("goldPerClickLabel");
-    const goldPerClickSpan = document.getElementById("goldPerClick");
-    const toolCostSpan = document.getElementById("toolCost");
-    const workerCostSpan = document.getElementById("workerCost");
-    const workersSpan = document.getElementById("workers");
-    const gpsSpan = document.getElementById("gps");
-    const bonusSpan = document.getElementById("bonus");
-    const characterList = document.getElementById("characterList");
-    const rateDisplay = document.getElementById("rate");
-
-    function applyBonus(value) {
-      return Math.floor(value * (1 + prestigeBonus / 100));
-    }
-
-    function updateDisplay() {
-      goldDisplay.textContent = gold;
-      goldPerClickLabel.textContent = goldPerClick;
-      goldPerClickSpan.textContent = goldPerClick;
-      toolCostSpan.textContent = toolCost;
-      workerCostSpan.textContent = workerCost;
-      workersSpan.textContent = workers;
-      gpsSpan.textContent = goldPerSecond;
-      bonusSpan.textContent = prestigeBonus;
-      rateDisplay.textContent = getExchangeRate().toFixed(2);
-    }
-
-    document.getElementById("mineBtn").onclick = () => {
-      gold += applyBonus(goldPerClick);
-      updateDisplay();
-    };
-
-    document.getElementById("upgradeTool").onclick = () => {
-      if (gold >= toolCost) {
-        gold -= toolCost;
-        goldPerClick++;
-        toolLevel++;
-        toolCost = Math.floor(toolCost * 1.5);
-        updateDisplay();
-      }
-    };
-
-    document.getElementById("hireWorker").onclick = () => {
-      if (gold >= workerCost) {
-        gold -= workerCost;
-        workers++;
-        goldPerSecond = workers;
-        workerCost = Math.floor(workerCost * 1.5);
-        showCharacterImage(workers);
-        updateDisplay();
-      }
-    };
-
-    function showCharacterImage(index) {
-      const img = document.createElement("img");
-      img.src = `https://placehold.co/80x80?text=Worker+${index}`;
-      img.alt = `Worker ${index}`;
-      img.classList.add("character-img");
-      characterList.appendChild(img);
-    }
-
-    function buyGold(amount) {
-      gold += amount;
-      alert("ขอบคุณที่สนับสนุน!");
-      updateDisplay();
-    }
-
-    function buyUpgrade() {
-      goldPerClick += 5;
-      alert("อัปเกรดสำเร็จ!");
-      updateDisplay();
-    }
-
-    document.getElementById("prestigeBtn").onclick = () => {
-      if (gold >= 1000) {
-        prestigeBonus += 10;
-        gold = 0;
-        goldPerClick = 1;
-        toolLevel = 1;
-        toolCost = 10;
-        workers = 0;
-        goldPerSecond = 0;
-        workerCost = 50;
-        characterList.innerHTML = "";
-        alert("คุณ Prestige แล้ว! โบนัสถาวร +10%");
-        updateDisplay();
-      } else {
-        alert("ต้องมีทองอย่างน้อย 1000 เพื่อ Prestige");
-      }
-    };
-
-    function getExchangeRate() {
-      const baseRate = 0.1;
-      const multiplier = Math.max(1 - (totalCoinRedeemedToday / maxTHBPayoutPerDay), 0.3);
-      return baseRate * multiplier;
-    }
-
-    function redeemCoin() {
-      const amount = parseInt(document.getElementById("redeemAmount").value);
-      const rate = getExchangeRate();
-      if (isNaN(amount) || amount <= 0) return alert("กรุณากรอกจำนวนที่ถูกต้อง");
-      if (gold >= amount) {
-        const thb = (amount * rate).toFixed(2);
-        gold -= amount;
-        totalCoinRedeemedToday += parseFloat(thb);
-        document.getElementById("redeemMsg").textContent =
-          `คุณขอแลก ${amount} Coin เป็น ${thb} บาท (รอดำเนินการ)`;
-        updateDisplay();
-      } else {
-        alert("Coin ไม่พอ");
-      }
-    }
-
-    setInterval(() => {
-      gold += applyBonus(goldPerSecond);
-      updateDisplay();
-    }, 1000);
-
-    function saveGame() {
-      const saveData = {
-        gold, goldPerClick, toolLevel, toolCost,
-        workers, workerCost, goldPerSecond,
-        prestigeBonus, totalCoinRedeemedToday
-      };
-      localStorage.setItem("goldMineSave", JSON.stringify(saveData));
-    }
-
-    function loadGame() {
-      const saved = localStorage.getItem("goldMineSave");
-      if (saved) {
-        const data = JSON.parse(saved);
-        gold = data.gold ?? 0;
-        goldPerClick = data.goldPerClick ?? 1;
-        toolLevel = data.toolLevel ?? 1;
-        toolCost = data.toolCost ?? 10;
-        workers = data.workers ?? 0;
-        workerCost = data.workerCost ?? 50;
-        goldPerSecond = data.goldPerSecond ?? 0;
-        prestigeBonus = data.prestigeBonus ?? 0;
-        totalCoinRedeemedToday = data.totalCoinRedeemedToday ?? 0;
-        for (let i = 1; i <= workers; i++) showCharacterImage(i);
-      }
-    }
-
-    loadGame();
-    updateDisplay();
-    setInterval(saveGame, 10000);
-  </script></body>
-</html>
+}
