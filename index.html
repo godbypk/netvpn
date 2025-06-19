@@ -95,21 +95,23 @@
 <body>
   <div class="container">
     <div class="icon"><i class="fas fa-heart"></i></div>
-    <h1>สนับสนุนเรา</h1>
-    <p>เลือกช่องทาง:</p>
+    <h1>เช่า VPN Sever VIP</h1>
+    <p>เลือกช่องทางชำระเงิน:</p>
     <select id="channel">
       <option value="promptpay">PromptPay</option>
       <option value="truemoney">TrueMoney Wallet</option>
-    </select><p>เลือกหมวดหมู่:</p>
+    </select><p>เลือกแพ็คเกจ VPN:</p>
 <select id="category">
-  <option value="support">สนับสนุนเรา</option>
-  <option value="develop">พัฒนาโปรเจกต์</option>
+  <option value="Ais01">AIS 128k ทั่วไป</option>
+  <option value="Ais02">AIS 128k สายเกมส์</option>
+  <option value="True01">True Zoom ที่วไป</option>
+  <option value="True02">True Zoom สายเกมส์</option>
 </select>
 
 <div class="preset-container" id="presetContainer">
-  <button onclick="setAmount(20)">20 บาท</button>
-  <button onclick="setAmount(50)">50 บาท</button>
-  <button onclick="setAmount(100)">100 บาท</button>
+  <button onclick="setAmount(20)">20 บาท 7วัน</button>
+  <button onclick="setAmount(50)">50 บาท 15วัน</button>
+  <button onclick="setAmount(100)">100 บาท 40วัน</button>
   <button onclick="setAmount(0)">กำหนดเอง</button>
 </div>
 <input type="number" id="customAmount" placeholder="จำนวนเงิน (บาท)" style="margin-top:10px;padding:8px;border-radius:5px;border:none;width:80%;max-width:200px;" />
@@ -117,11 +119,11 @@
 <button onclick="generateQR()">ดำเนินการ</button>
 <!-- ปุ่มดาวน์โหลด QR -->
 <a id="downloadLink" style="display: none;">
-  <button class="download-btn">ดาวน์โหลด QR Code</button>
+  <button class="download-btn">ดาวน์โหลด QR Code เพื่อนชำระเงิน</button>
 </a>
 
 <!-- ✅ ปุ่มแจ้งโอนผ่าน Telegram (ซ่อนไว้ก่อน) -->
-<button id="notifyBtn" onclick="notifyTelegram()" style="display: none;">แจ้งโอนผ่าน Telegram</button>
+<button id="notifyBtn" onclick="notifyTelegram()" style="display: none;">ยืนยันการโอน</button>
 </a>
 <br>
 <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-adjust"></i> เปลี่ยนธีม</button>
