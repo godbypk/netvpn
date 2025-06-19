@@ -1,0 +1,203 @@
+<!DOCTYPE html><html lang="th"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สนับสนุนเรา</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; font-family: 'Kanit', sans-serif; }
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: background 0.5s, color 0.5s;
+    }
+    :root {
+      --bg1: #0f2027;
+      --bg2: #203a43;
+      --text: #ffffff;
+      --btn: #00c853;
+      --btn-hover: #00b34d;
+      --btn2: #2196f3;
+      --btn2-hover: #1976d2;
+    }
+    .dark {
+      --bg1: #fafafa;
+      --bg2: #eeeeee;
+      --text: #111;
+      --btn: #2e7d32;
+      --btn-hover: #1b5e20;
+      --btn2: #1565c0;
+      --btn2-hover: #0d47a1;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 1s ease-in-out;
+      max-width: 500px;
+      width: 90%;
+    }
+    h1 { margin-bottom: 10px; font-size: 2rem; }
+    .qr-box { margin-top: 20px; }
+    button {
+      background: var(--btn);
+      border: none;
+      padding: 12px 24px;
+      color: white;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin: 10px 5px;
+    }
+    button:hover { background: var(--btn-hover); }
+    .download-btn { background: var(--btn2); }
+    .download-btn:hover { background: var(--btn2-hover); }
+    .theme-btn {
+      background: transparent;
+      color: var(--text);
+      border: 2px solid var(--text);
+    }
+    .theme-btn:hover {
+      background: var(--text);
+      color: var(--bg1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .icon { font-size: 40px; margin-bottom: 10px; color: #00e676; }
+    .preset-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    select {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon"><i class="fas fa-heart"></i></div>
+    <h1>สนับสนุนเรา</h1>
+    <p>เลือกช่องทาง:</p>
+    <select id="channel">
+      <option value="promptpay">PromptPay</option>
+      <option value="truemoney">TrueMoney Wallet</option>
+    </select><p>เลือกหมวดหมู่:</p>
+<select id="category">
+  <option value="support">สนับสนุนเรา</option>
+  <option value="develop">พัฒนาโปรเจกต์</option>
+</select>
+
+<div class="preset-container" id="presetContainer">
+  <button onclick="setAmount(20)">20 บาท</button>
+  <button onclick="setAmount(50)">50 บาท</button>
+  <button onclick="setAmount(100)">100 บาท</button>
+  <button onclick="setAmount(0)">กำหนดเอง</button>
+</div>
+<input type="number" id="customAmount" placeholder="จำนวนเงิน (บาท)" style="margin-top:10px;padding:8px;border-radius:5px;border:none;width:80%;max-width:200px;" />
+<div class="qr-box" id="qrBox"></div>
+<button onclick="generateQR()">ดำเนินการ</button>
+<!-- ปุ่มดาวน์โหลด QR -->
+<a id="downloadLink" style="display: none;">
+  <button class="download-btn">ดาวน์โหลด QR Code</button>
+</a>
+
+<!-- ✅ ปุ่มแจ้งโอนผ่าน Telegram (ซ่อนไว้ก่อน) -->
+<button id="notifyBtn" onclick="notifyTelegram()" style="display: none;">แจ้งโอนผ่าน Telegram</button>
+</a>
+<br>
+<button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-adjust"></i> เปลี่ยนธีม</button>
+
+  </div>  <script>
+    const promptpay = "0620167462";
+    const walletUrl = "https://tmn.app.link/LqKi0gjq1Tb"; // เปลี่ยนเป็นลิงก์รับเงินของคุณ
+    let amount = 0;
+
+    function setAmount(val) {
+      amount = val;
+      document.getElementById('customAmount').value = val > 0 ? val : '';
+    }
+
+async function generateQR() {
+  const channel = document.getElementById('channel').value;
+  const category = document.getElementById('category').value;
+  const qrBox = document.getElementById('qrBox');
+  const downloadLink = document.getElementById('downloadLink');
+  const notifyBtn = document.getElementById('notifyBtn');
+  const presetContainer = document.getElementById('presetContainer');
+  const customAmount = document.getElementById('customAmount');
+
+  qrBox.innerHTML = "";
+  downloadLink.style.display = "none";
+  notifyBtn.style.display = "none"; // ซ่อนไว้ก่อน
+
+  if (channel === 'truemoney') {
+    presetContainer.style.display = 'none';
+    customAmount.style.display = 'none';
+
+    const walletButton = document.createElement('a');
+    walletButton.href = walletUrl;
+    walletButton.target = "_blank";
+    walletButton.innerHTML = `<button class='download-btn'><i class='fas fa-wallet'></i> เปิดแอป TrueMoney Wallet</button>`;
+    qrBox.appendChild(walletButton);
+    return;
+  } else {
+    presetContainer.style.display = 'flex';
+    customAmount.style.display = 'inline-block';
+  }
+
+  const inputAmount = parseFloat(document.getElementById('customAmount').value);
+  if (!isNaN(inputAmount)) amount = inputAmount;
+
+  const url = `https://www.pp-qr.com/api/${promptpay}/${amount}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    if (response.ok) {
+      const qrImage = document.createElement('img');
+      qrImage.src = data.qrImage;
+      qrImage.alt = "QR Code";
+      qrImage.style = "max-width: 100%; margin-top: 10px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);";
+      qrBox.appendChild(qrImage);
+
+      downloadLink.href = data.qrImage;
+      downloadLink.download = `donate_${channel}_${category}.png`;
+      downloadLink.style.display = "inline-block";
+
+      notifyBtn.style.display = "inline-block"; // ✅ แสดงปุ่มแจ้งเตือน
+    } else {
+      alert(data.error || "ไม่สามารถสร้าง QR Code ได้");
+    }
+  } catch (err) {
+    alert("เกิดข้อผิดพลาดในการเชื่อมต่อ API");
+    console.error(err);
+  }
+}
+
+function notifyTelegram() {
+  alert("ส่งข้อมูลไปยัง Telegram แล้ว (ตัวอย่าง)");
+  // ที่นี่คุณสามารถเขียน logic การส่งไป Telegram API ได้จริง
+}
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
+  </script></body>
+</html>
