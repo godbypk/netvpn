@@ -138,19 +138,30 @@
       <button class="download-btn">ดาวน์โหลด QR Code เพื่อชำระเงิน (อย่าลืมยืนยัน)</button>
     </a>
 
-    <p id="slipNote">📎 กรุณาแนบสลิปเพื่อยืนยันการชำระเงิน</p>
+    <p id="slipNote">📎 กรุณาแนบสลิปเเละยืนยันการชำระเงิน</p>
     <input type="file" id="slipInput" accept="image/*" />
     <label for="slipInput" id="slipLabel">📎 แนบสลิปยืนยันการโอน</label>
-
+    <p id="slipSuccessMsg" style="display:none; color: #00e676; font-weight: bold; margin-top: 10px;">
+      ✅ แนบสลิปเรียบร้อยแล้ว
+    </p>
     <button id="notifyBtn" onclick="notifyTelegram()" style="display: none;">📤 ยืนยันการโอน</button>
   </div>
 
   <script>
     const promptpay = "0620167462";
     const walletUrl = "https://tmn.app.link/LqKi0gjq1Tb";
-    const botToken = "YOUR_BOT_TOKEN"; // 👈 แก้ไขตรงนี้
-    const chatId = "YOUR_CHAT_ID";     // 👈 แก้ไขตรงนี้
+    const botToken = "8099885021:AAEAtsdv37sf0D020jfVjTCG0MBno95q6BY";
+    const chatId = "1352131997";
     let amount = 0;
+
+    document.getElementById('slipInput').addEventListener('change', function () {
+      const successMsg = document.getElementById('slipSuccessMsg');
+      if (this.files.length > 0) {
+        successMsg.style.display = 'block';
+      } else {
+        successMsg.style.display = 'none';
+      }
+    });
 
     function setAmount(val) {
       amount = val;
@@ -176,6 +187,11 @@
 
       const inputAmount = parseFloat(customAmount.value);
       if (!isNaN(inputAmount)) amount = inputAmount;
+
+      if (amount <= 0 || isNaN(amount)) {
+        alert("⚠️ กรุณาระบุจำนวนเงินให้ถูกต้อง");
+        return;
+      }
 
       if (channel === 'truemoney') {
         presetContainer.style.display = 'none';
