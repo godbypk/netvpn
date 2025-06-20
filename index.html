@@ -1,124 +1,101 @@
-<!DOCTYPE html>
-<html lang="th">
+<!DOCTYPE html><html lang="th">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>สนับสนุนเรา</title>
+  <title>VPN Server VIP</title>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; font-family: 'Kanit', sans-serif; }
     body {
       margin: 0;
-      background: linear-gradient(135deg, #0f2027, #203a43);
+      background: linear-gradient(135deg, #1c1c1c, #2e2e2e);
       color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 30px 10px;
+      padding: 30px 15px;
     }
     .container {
-      background: rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
       border-radius: 20px;
       padding: 40px 20px;
       text-align: center;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      max-width: 500px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+      max-width: 600px;
       width: 100%;
     }
-    h1 { margin-bottom: 10px; font-size: 2rem; }
-    .qr-box { margin-top: 20px; }
-
+    h1, h2 { margin-bottom: 10px; font-size: 2rem; color: #00e676; }
+    p { margin: 10px 0; }
     button {
       background: #00c853;
       border: none;
       padding: 12px 24px;
       color: white;
       font-size: 1rem;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
       margin: 10px 5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.3s ease;
     }
     button:hover { background: #00b34d; }
-
-    .download-btn {
-      background: #2196f3;
-    }
-    .download-btn:hover {
-      background: #1976d2;
-    }
-
+    .download-btn { background: #2196f3; }
+    .download-btn:hover { background: #1976d2; }
     #notifyBtn {
       background: #ff1744;
-      color: white;
       font-weight: bold;
       font-size: 1.1rem;
       animation: blink 1s infinite;
       padding: 14px 28px;
       border-radius: 12px;
-      margin-top: 20px;
     }
     @keyframes blink {
       0%, 100% { background-color: #ff1744; }
       50% { background-color: #ff4569; }
     }
-
-    #slipInput, #slipLabel, #slipNote, #slipSuccessMsg {
-      display: none;
-    }
-
+    #slipInput, #slipLabel, #slipNote, #slipSuccessMsg { display: none; }
     #slipLabel {
       background: #ff8a80;
       padding: 12px 24px;
       font-weight: bold;
       font-size: 1rem;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
-      margin-top: 20px;
     }
-
-    #slipLabel:hover {
-      background: #ff5252;
-    }
-
-    #slipNote {
-      margin-top: 15px;
-      color: #ffcdd2;
-      font-weight: bold;
-    }
-
-    select {
+    #slipLabel:hover { background: #ff5252; }
+    #slipNote { margin-top: 15px; color: #ffcdd2; font-weight: bold; }
+    select, input[type=number] {
       padding: 10px;
-      margin-bottom: 10px;
+      margin: 10px 0;
       border-radius: 10px;
       border: none;
+      width: 80%;
+      max-width: 250px;
     }
-
     .preset-container {
       display: flex;
       justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
       flex-wrap: wrap;
+      gap: 10px;
     }
-
     hr {
       border: 1px solid #ffffff22;
       margin: 30px 0;
       width: 90%;
     }
-
-    .review-box {
-      background: #ffffff11;
-      padding: 15px;
+    .contact-box, .review-box {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
       border-radius: 15px;
-      margin-bottom: 10px;
+      margin: 10px 0;
     }
   </style>
 </head>
 <body>
-
   <div class="container">
     <h1>เช่า VPN Server VIP</h1>
     <p>เลือกช่องทางชำระเงิน:</p>
@@ -133,52 +110,40 @@
       <option value="True01">True Zoom ทั่วไป</option>
       <option value="True02">True Zoom สายเกมส์</option>
     </select>
-
     <div class="preset-container" id="presetContainer">
       <button onclick="setAmount(20)">20 บาท 7วัน</button>
       <button onclick="setAmount(50)">50 บาท 15วัน</button>
       <button onclick="setAmount(100)">100 บาท 40วัน</button>
       <button onclick="setAmount(0)">กำหนดเอง</button>
     </div>
-    <input type="number" id="customAmount" placeholder="จำนวนเงิน (บาท)" style="margin-top:10px;padding:8px;border-radius:5px;border:none;width:80%;max-width:200px;" />
-
+    <input type="number" id="customAmount" placeholder="จำนวนเงิน (บาท)" />
     <div class="qr-box" id="qrBox"></div>
-    <button onclick="generateQR()">ดำเนินการ</button>
-
+    <button onclick="generateQR()"><i class="fas fa-qrcode"></i> ดำเนินการ</button>
     <a id="downloadLink" style="display: none;">
-      <button class="download-btn">ดาวน์โหลด QR Code เพื่อชำระเงิน (อย่าลืมยืนยัน)</button>
+      <button class="download-btn"><i class="fas fa-download"></i> ดาวน์โหลด QR Code เพื่อชำระเงิน</button>
     </a>
-
     <p id="slipNote">📎 กรุณาแนบสลิปเเละยืนยันการชำระเงิน</p>
     <input type="file" id="slipInput" accept="image/*" />
-    <label for="slipInput" id="slipLabel">📎 แนบสลิปยืนยันการโอน</label>
-    <p id="slipSuccessMsg" style="color: #00e676; font-weight: bold; margin-top: 10px;">✅ แนบสลิปเรียบร้อยแล้ว</p>
-    <button id="notifyBtn" onclick="notifyTelegram()">📤 ยืนยันการโอน</button>
-  </div>
-
-  <!-- ✅ ช่องทางติดต่อรับไฟล์ -->
-  <hr>
-  <div style="text-align: center;">
-    <h2>📥 ติดต่อรับไฟล์ VPN</h2>
+    <label for="slipInput" id="slipLabel"><i class="fas fa-paperclip"></i> แนบสลิปยืนยันการโอน</label>
+    <p id="slipSuccessMsg" style="color: #00e676; font-weight: bold;">✅ แนบสลิปเรียบร้อย</p>
+    <button id="notifyBtn" onclick="notifyTelegram()"><i class="fas fa-paper-plane"></i> ยืนยันการโอน</button>
+  </div>  <hr>
+  <div class="contact-box">
+    <h2><i class="fas fa-file-download"></i> ติดต่อรับไฟล์ VPN</h2>
     <p>หลังโอนเงิน กรุณาทักแอดมินเพื่อรับไฟล์ VPN</p>
-    <a href="https://t.me/your_telegram" target="_blank">
-      <button style="background:#0088cc;"><i class="fab fa-telegram"></i> ติดต่อผ่าน Telegram</button>
+    <a href="https://facebook.com/your_facebook_page" target="_blank">
+      <button style="background:#3b5998;"><i class="fab fa-facebook-f"></i> ติดต่อผ่าน Facebook</button>
     </a>
     <a href="https://lin.ee/your_line" target="_blank">
       <button style="background:#00c300;"><i class="fab fa-line"></i> ติดต่อผ่าน LINE</button>
     </a>
-  </div>
-
-  <!-- ✅ กล่องรีวิว -->
-  <hr>
-  <div style="max-width: 500px; width: 90%;">
-    <h2 style="text-align:center;">⭐ รีวิวจากลูกค้า</h2>
+  </div>  <hr>
+  <div style="max-width: 600px;">
+    <h2 style="text-align:center;"><i class="fas fa-star"></i> รีวิวจากลูกค้า</h2>
     <div class="review-box"><strong>คุณบาส:</strong><br>ใช้งานดีมากครับ แอดมินตอบไว เซิร์ฟเวอร์ไม่หลุดเลย</div>
     <div class="review-box"><strong>คุณเมย์:</strong><br>เล่นเกมได้ลื่นขึ้นจริง ราคาถูก แนะนำเลย!</div>
     <div class="review-box"><strong>คุณตั้ม:</strong><br>เติมเงินแล้วส่งไฟล์ให้ไวมาก ใช้งานง่ายสุด ๆ</div>
-  </div>
-
-  <script>
+  </div>  <script>
     const promptpay = "0620167462";
     const walletUrl = "https://tmn.app.link/LqKi0gjq1Tb";
     const botToken = "8099885021:AAEAtsdv37sf0D020jfVjTCG0MBno95q6BY";
@@ -186,12 +151,7 @@
     let amount = 0;
 
     document.getElementById('slipInput').addEventListener('change', function () {
-      const successMsg = document.getElementById('slipSuccessMsg');
-      if (this.files.length > 0) {
-        successMsg.style.display = 'block';
-      } else {
-        successMsg.style.display = 'none';
-      }
+      document.getElementById('slipSuccessMsg').style.display = this.files.length > 0 ? 'block' : 'none';
     });
 
     function setAmount(val) {
@@ -291,7 +251,7 @@
         });
         const data = await res.json();
         if (data.ok) {
-          alert("✅ แจ้งโอนสำเร็จ! ระบบได้รับข้อมูลเรียบร้อยแล้ว");
+          alert("✅ แจ้งโอนสำเร็จ!");
         } else {
           alert("❌ ส่งไม่สำเร็จ: " + data.description);
         }
@@ -300,6 +260,5 @@
         console.error(err);
       }
     }
-  </script>
-</body>
+  </script></body>
 </html>
