@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="th"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>สนับสนุนเรา</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -43,7 +43,6 @@
       padding: 40px;
       text-align: center;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      animation: fadeIn 1s ease-in-out;
       max-width: 500px;
       width: 90%;
     }
@@ -72,10 +71,6 @@
       background: var(--text);
       color: var(--bg1);
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
     .icon { font-size: 40px; margin-bottom: 10px; color: #00e676; }
     .preset-container {
       display: flex;
@@ -90,6 +85,29 @@
       border-radius: 10px;
       border: none;
     }
+
+    #notifyBtn {
+      background: #ff1744;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+      animation: blink 1s infinite;
+      padding: 14px 28px;
+      border-radius: 12px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    @keyframes blink {
+      0%, 100% { background-color: #ff1744; }
+      50% { background-color: #ff4569; }
+    }
+
+    #slipInput {
+      margin-top: 10px;
+      display: none;
+      color: var(--text);
+    }
   </style>
 </head>
 <body>
@@ -100,132 +118,150 @@
     <select id="channel">
       <option value="promptpay">PromptPay</option>
       <option value="truemoney">TrueMoney Wallet</option>
-    </select><p>เลือกแพ็คเกจ VPN:</p>
-<select id="category">
-  <option value="Ais01">AIS 128k ทั่วไป</option>
-  <option value="Ais02">AIS 128k สายเกมส์</option>
-  <option value="True01">True Zoom ที่วไป</option>
-  <option value="True02">True Zoom สายเกมส์</option>
-</select>
+    </select>
+    <p>เลือกแพ็คเกจ VPN:</p>
+    <select id="category">
+      <option value="Ais01">AIS 128k ทั่วไป</option>
+      <option value="Ais02">AIS 128k สายเกมส์</option>
+      <option value="True01">True Zoom ทั่วไป</option>
+      <option value="True02">True Zoom สายเกมส์</option>
+    </select>
 
-<div class="preset-container" id="presetContainer">
-  <button onclick="setAmount(20)">20 บาท 7วัน</button>
-  <button onclick="setAmount(50)">50 บาท 15วัน</button>
-  <button onclick="setAmount(100)">100 บาท 40วัน</button>
-  <button onclick="setAmount(0)">กำหนดเอง</button>
-</div>
-<input type="number" id="customAmount" placeholder="จำนวนเงิน (บาท)" style="margin-top:10px;padding:8px;border-radius:5px;border:none;width:80%;max-width:200px;" />
-<div class="qr-box" id="qrBox"></div>
-<button onclick="generateQR()">ดำเนินการ</button>
-<!-- ปุ่มดาวน์โหลด QR -->
-<a id="downloadLink" style="display: none;">
-  <button class="download-btn">ดาวน์โหลด QR Code เพื่อนชำระเงิน</button>
-</a>
+    <div class="preset-container" id="presetContainer">
+      <button onclick="setAmount(20)">20 บาท 7วัน</button>
+      <button onclick="setAmount(50)">50 บาท 15วัน</button>
+      <button onclick="setAmount(100)">100 บาท 40วัน</button>
+      <button onclick="setAmount(0)">กำหนดเอง</button>
+    </div>
 
-<!-- ✅ ปุ่มแจ้งโอนผ่าน Telegram (ซ่อนไว้ก่อน) -->
-<button id="notifyBtn" onclick="notifyTelegram()" style="display: none;">ยืนยันการโอน</button>
-</a>
-<br>
-<button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-adjust"></i> เปลี่ยนธีม</button>
+    <input type="number" id="customAmount" placeholder="จำนวนเงิน (บาท)" style="margin-top:10px;padding:8px;border-radius:5px;border:none;width:80%;max-width:200px;" />
+    <div class="qr-box" id="qrBox"></div>
 
-  </div>  <script>
-  const promptpay = "0620167462";
-  const walletUrl = "https://tmn.app.link/LqKi0gjq1Tb";
-  const botToken = "8099885021:AAEAtsdv37sf0D020jfVjTCG0MBno95q6BY";
-  const chatId = "1352131997";
-  let amount = 0;
+    <button onclick="generateQR()">ดำเนินการ</button>
 
-  function setAmount(val) {
-    amount = val;
-    document.getElementById('customAmount').value = val > 0 ? val : '';
-  }
+    <a id="downloadLink" style="display: none;">
+      <button class="download-btn">ดาวน์โหลด QR Code เพื่อชำระเงิน (อย่าลืมยืนยันการโอน)</button>
+    </a>
 
-  async function generateQR() {
-    const channel = document.getElementById('channel').value;
-    const category = document.getElementById('category').value;
-    const qrBox = document.getElementById('qrBox');
-    const downloadLink = document.getElementById('downloadLink');
-    const notifyBtn = document.getElementById('notifyBtn');
-    const presetContainer = document.getElementById('presetContainer');
-    const customAmount = document.getElementById('customAmount');
+    <input type="file" id="slipInput" accept="image/*">
+    <button id="notifyBtn" onclick="notifyTelegram()">📤 ยืนยันการโอน</button>
 
-    qrBox.innerHTML = "";
-    downloadLink.style.display = "none";
-    notifyBtn.style.display = "none";
+    <br><br>
+    <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-adjust"></i> เปลี่ยนธีม</button>
+  </div>
 
-    if (channel === 'truemoney') {
-      presetContainer.style.display = 'none';
-      customAmount.style.display = 'none';
+  <script>
+    const promptpay = "0620167462";
+    const walletUrl = "https://tmn.app.link/LqKi0gjq1Tb";
+    const botToken = "8099885021:AAEAtsdv37sf0D020jfVjTCG0MBno95q6BY";
+    const chatId = "1352131997";
+    let amount = 0;
 
-      const walletButton = document.createElement('a');
-      walletButton.href = walletUrl;
-      walletButton.target = "_blank";
-      walletButton.innerHTML = `<button class='download-btn'><i class='fas fa-wallet'></i> เปิดแอป TrueMoney Wallet</button>`;
-      qrBox.appendChild(walletButton);
-      return;
-    } else {
+    function setAmount(val) {
+      amount = val;
+      document.getElementById('customAmount').value = val > 0 ? val : '';
+    }
+
+    async function generateQR() {
+      const channel = document.getElementById('channel').value;
+      const category = document.getElementById('category').value;
+      const qrBox = document.getElementById('qrBox');
+      const downloadLink = document.getElementById('downloadLink');
+      const notifyBtn = document.getElementById('notifyBtn');
+      const slipInput = document.getElementById('slipInput');
+      const presetContainer = document.getElementById('presetContainer');
+      const customAmount = document.getElementById('customAmount');
+
+      qrBox.innerHTML = "";
+      downloadLink.style.display = "none";
+      notifyBtn.style.display = "none";
+      slipInput.style.display = "none";
+
+      if (channel === 'truemoney') {
+        presetContainer.style.display = 'none';
+        customAmount.style.display = 'inline-block';
+        notifyBtn.style.display = 'inline-block';
+        slipInput.style.display = 'block';
+        const inputAmount = parseFloat(customAmount.value);
+        if (!isNaN(inputAmount)) amount = inputAmount;
+
+        const walletButton = document.createElement('a');
+        walletButton.href = walletUrl;
+        walletButton.target = "_blank";
+        walletButton.innerHTML = `<button class='download-btn'><i class='fas fa-wallet'></i> เปิดแอป TrueMoney Wallet</button>`;
+        qrBox.appendChild(walletButton);
+        return;
+      }
+
       presetContainer.style.display = 'flex';
       customAmount.style.display = 'inline-block';
-    }
 
-    const inputAmount = parseFloat(customAmount.value);
-    if (!isNaN(inputAmount)) amount = inputAmount;
+      const inputAmount = parseFloat(customAmount.value);
+      if (!isNaN(inputAmount)) amount = inputAmount;
 
-    const url = `https://www.pp-qr.com/api/${promptpay}/${amount}`;
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      if (response.ok) {
-        const qrImage = document.createElement('img');
-        qrImage.src = data.qrImage;
-        qrImage.alt = "QR Code";
-        qrImage.style = "max-width: 100%; margin-top: 10px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);";
-        qrBox.appendChild(qrImage);
+      const url = `https://www.pp-qr.com/api/${promptpay}/${amount}`;
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (response.ok) {
+          const qrImage = document.createElement('img');
+          qrImage.src = data.qrImage;
+          qrImage.alt = "QR Code";
+          qrImage.style = "max-width: 100%; margin-top: 10px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);";
+          qrBox.appendChild(qrImage);
 
-        downloadLink.href = data.qrImage;
-        downloadLink.download = `donate_${channel}_${category}.png`;
-        downloadLink.style.display = "inline-block";
+          downloadLink.href = data.qrImage;
+          downloadLink.download = `donate_${channel}_${category}.png`;
+          downloadLink.style.display = "inline-block";
 
-        notifyBtn.style.display = "inline-block";
-      } else {
-        alert(data.error || "ไม่สามารถสร้าง QR Code ได้");
+          notifyBtn.style.display = "inline-block";
+          slipInput.style.display = "block";
+        } else {
+          alert(data.error || "ไม่สามารถสร้าง QR Code ได้");
+        }
+      } catch (err) {
+        alert("เกิดข้อผิดพลาดในการเชื่อมต่อ API");
+        console.error(err);
       }
-    } catch (err) {
-      alert("เกิดข้อผิดพลาดในการเชื่อมต่อ API");
-      console.error(err);
     }
-  }
 
-  async function notifyTelegram() {
-    const channel = document.getElementById('channel').value;
-    const category = document.getElementById('category').value;
+    async function notifyTelegram() {
+      const channel = document.getElementById('channel').value;
+      const category = document.getElementById('category').value;
+      const slipInput = document.getElementById('slipInput');
+      const file = slipInput.files[0];
 
-    const message = `📢 แจ้งโอน\n💸 ช่องทาง: ${channel}\n📁 หมวดหมู่: ${category}\n💰 จำนวน: ${amount} บาท`;
-
-    try {
-      const res = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: message
-        })
-      });
-
-      const data = await res.json();
-      if (data.ok) {
-        alert("ส่งข้อมูลไปยัง Telegram สำเร็จ");
-      } else {
-        alert("ส่งไม่สำเร็จ: " + data.description);
+      if (!file) {
+        alert("กรุณาแนบสลิปการโอนก่อน");
+        return;
       }
-    } catch (err) {
-      alert("เกิดข้อผิดพลาดในการเชื่อมต่อ Telegram API");
-      console.error(err);
-    }
-  }
 
-  function toggleTheme() {
-    document.body.classList.toggle('dark');
-  }
-</script></body>
+      const formData = new FormData();
+      formData.append("chat_id", chatId);
+      formData.append("caption", `📢 แจ้งโอน\n💸 ช่องทาง: ${channel}\n📁 หมวดหมู่: ${category}\n💰 จำนวน: ${amount} บาท`);
+      formData.append("photo", file);
+
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await res.json();
+        if (data.ok) {
+          alert("✅ ส่งข้อมูลและสลิปไปยัง Telegram สำเร็จ");
+        } else {
+          alert("❌ ส่งไม่สำเร็จ: " + data.description);
+        }
+      } catch (err) {
+        alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อ Telegram API");
+        console.error(err);
+      }
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
+  </script>
+</body>
 </html>
