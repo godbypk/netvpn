@@ -104,6 +104,9 @@
       <option value="truemoney">TrueMoney Wallet</option>
     </select>
     <p>เลือกแพ็คเกจ VPN:</p>
+    <p>ใส่โค้ดส่วนลด (ถ้ามี):</p>
+<input type="text" id="discountCode" placeholder="กรอกโค้ดส่วนลด" />
+<p id="discountResult" style="color:#00e676; font-weight: bold;"></p>
     <select id="category">
       <option value="Aisทั่วไป">AIS 128k ทั่วไป</option>
       <option value="Aisสายเกมส์">AIS 128k สายเกมส์</option>
@@ -158,128 +161,154 @@
     </div>
   </div>
 
-  <script>
-    const promptpay = "0620167462";
-    const walletUrl = "https://tmn.app.link/LqKi0gjq1Tb";
-    const botToken = "7789309548:AAGmd136XvDL5MhMxIxPcGL3f5nwuT74ClM";
-    const chatId = "7894990684";
-    let amount = 0;
+<script>
+  const promptpay = "0620167462";
+  const walletUrl = "https://tmn.app.link/LqKi0gjq1Tb";
+  const botToken = "7789309548:AAGmd136XvDL5MhMxIxPcGL3f5nwuT74ClM";
+  const chatId = "7894990684";
+  let amount = 0;
+  let finalAmount = 0;
 
-    const hourNow = new Date().getHours();
-    if (hourNow < 9 || hourNow >= 22) {
-      alert("⏰ ขณะนี้อยู่นอกเวลาทำการของแอดมิน (09.00 – 22.00 น.)\nคุณยังสามารถโอนเงินและแนบสลิปไว้ได้เลย แล้วแอดมินจะตอบกลับเมื่อออนไลน์");
+  const discountCodes = {
+    "VIP10": { discount: 10, expires: "2025-12-31" },
+    "GAME20": { discount: 20, expires: "2025-07-01" },
+    "PRO50": { discount: 50, expires: "2025-06-30" }
+  };
+
+  const hourNow = new Date().getHours();
+  if (hourNow < 9 || hourNow >= 22) {
+    alert("⏰ ขณะนี้อยู่นอกเวลาทำการของแอดมิน (09.00 – 22.00 น.)\nคุณยังสามารถโอนเงินและแนบสลิปไว้ได้เลย แล้วแอดมินจะตอบกลับเมื่อออนไลน์");
+  }
+
+  document.getElementById('slipInput').addEventListener('change', function () {
+    document.getElementById('slipSuccessMsg').style.display = this.files.length > 0 ? 'block' : 'none';
+  });
+
+  function setAmount(val) {
+    amount = val;
+    document.getElementById('customAmount').value = val > 0 ? val : '';
+  }
+
+  async function generateQR() {
+    const channel = document.getElementById('channel').value;
+    const category = document.getElementById('category').value;
+    const qrBox = document.getElementById('qrBox');
+    const downloadLink = document.getElementById('downloadLink');
+    const notifyBtn = document.getElementById('notifyBtn');
+    const slipLabel = document.getElementById('slipLabel');
+    const slipNote = document.getElementById('slipNote');
+    const presetContainer = document.getElementById('presetContainer');
+    const customAmount = document.getElementById('customAmount');
+    const discountInput = document.getElementById('discountCode').value.trim().toUpperCase();
+    const discountResult = document.getElementById('discountResult');
+
+    qrBox.innerHTML = "";
+    downloadLink.style.display = "none";
+    notifyBtn.style.display = "none";
+    slipLabel.style.display = "none";
+    slipNote.style.display = "none";
+
+    const inputAmount = parseFloat(customAmount.value);
+    if (!isNaN(inputAmount)) amount = inputAmount;
+
+    if (amount <= 0 || isNaN(amount)) {
+      alert("⚠️ กรุณาระบุจำนวนเงินให้ถูกต้อง");
+      return;
     }
 
-    document.getElementById('slipInput').addEventListener('change', function () {
-      document.getElementById('slipSuccessMsg').style.display = this.files.length > 0 ? 'block' : 'none';
-    });
-
-    function setAmount(val) {
-      amount = val;
-      document.getElementById('customAmount').value = val > 0 ? val : '';
+    // ตรวจสอบโค้ดส่วนลด
+    finalAmount = amount;
+    if (discountCodes[discountInput]) {
+      const { discount, expires } = discountCodes[discountInput];
+      const today = new Date().toISOString().split("T")[0];
+      if (today <= expires) {
+        finalAmount = Math.ceil(amount - (amount * discount / 100));
+        discountResult.innerText = `✅ โค้ด "${discountInput}" ลด ${discount}% เหลือ ${finalAmount} บาท`;
+      } else {
+        discountResult.innerText = `⚠️ โค้ด "${discountInput}" หมดอายุแล้ว`;
+      }
+    } else if (discountInput !== "") {
+      discountResult.innerText = `❌ โค้ด "${discountInput}" ไม่ถูกต้อง`;
+    } else {
+      discountResult.innerText = "";
     }
 
-    async function generateQR() {
-      const channel = document.getElementById('channel').value;
-      const category = document.getElementById('category').value;
-      const qrBox = document.getElementById('qrBox');
-      const downloadLink = document.getElementById('downloadLink');
-      const notifyBtn = document.getElementById('notifyBtn');
-      const slipLabel = document.getElementById('slipLabel');
-      const slipNote = document.getElementById('slipNote');
-      const presetContainer = document.getElementById('presetContainer');
-      const customAmount = document.getElementById('customAmount');
-
-      qrBox.innerHTML = "";
-      downloadLink.style.display = "none";
-      notifyBtn.style.display = "none";
-      slipLabel.style.display = "none";
-      slipNote.style.display = "none";
-
-      const inputAmount = parseFloat(customAmount.value);
-      if (!isNaN(inputAmount)) amount = inputAmount;
-
-      if (amount <= 0 || isNaN(amount)) {
-        alert("⚠️ กรุณาระบุจำนวนเงินให้ถูกต้อง");
-        return;
-      }
-
-      if (channel === 'truemoney') {
-        presetContainer.style.display = 'none';
-        customAmount.style.display = 'inline-block';
-        notifyBtn.style.display = 'inline-block';
-        slipLabel.style.display = 'inline-block';
-        slipNote.style.display = 'block';
-
-        const walletButton = document.createElement('a');
-        walletButton.href = walletUrl;
-        walletButton.target = "_blank";
-        walletButton.innerHTML = `<button class='download-btn'><i class='fas fa-wallet'></i> เปิดแอป TrueMoney Wallet</button>`;
-        qrBox.appendChild(walletButton);
-        return;
-      }
-
-      presetContainer.style.display = 'flex';
+    if (channel === 'truemoney') {
+      presetContainer.style.display = 'none';
       customAmount.style.display = 'inline-block';
+      notifyBtn.style.display = 'inline-block';
+      slipLabel.style.display = 'inline-block';
+      slipNote.style.display = 'block';
 
-      try {
-        const response = await fetch(`https://www.pp-qr.com/api/${promptpay}/${amount}`);
-        const data = await response.json();
-        if (response.ok) {
-          const qrImage = document.createElement('img');
-          qrImage.src = data.qrImage;
-          qrImage.alt = "QR Code";
-          qrImage.style.cssText = "max-width: 100%; margin-top: 10px; border-radius: 10px;";
-          qrBox.appendChild(qrImage);
-
-          downloadLink.href = data.qrImage;
-          downloadLink.download = `qr_${channel}_${category}.png`;
-          downloadLink.style.display = "inline-block";
-
-          notifyBtn.style.display = "inline-block";
-          slipLabel.style.display = "inline-block";
-          slipNote.style.display = "block";
-        } else {
-          alert(data.error || "ไม่สามารถสร้าง QR Code ได้");
-        }
-      } catch (err) {
-        alert("เกิดข้อผิดพลาดในการเชื่อมต่อ API");
-        console.error(err);
-      }
+      const walletButton = document.createElement('a');
+      walletButton.href = walletUrl;
+      walletButton.target = "_blank";
+      walletButton.innerHTML = `<button class='download-btn'><i class='fas fa-wallet'></i> เปิดแอป TrueMoney Wallet</button>`;
+      qrBox.appendChild(walletButton);
+      return;
     }
 
-    async function notifyTelegram() {
-      const channel = document.getElementById('channel').value;
-      const category = document.getElementById('category').value;
-      const slipInput = document.getElementById('slipInput');
-      const file = slipInput.files[0];
+    presetContainer.style.display = 'flex';
+    customAmount.style.display = 'inline-block';
 
-      if (!file) {
-        alert("⚠️ กรุณาแนบสลิปก่อนยืนยัน");
-        return;
+    try {
+      const response = await fetch(`https://www.pp-qr.com/api/${promptpay}/${finalAmount}`);
+      const data = await response.json();
+      if (response.ok) {
+        const qrImage = document.createElement('img');
+        qrImage.src = data.qrImage;
+        qrImage.alt = "QR Code";
+        qrImage.style.cssText = "max-width: 100%; margin-top: 10px; border-radius: 10px;";
+        qrBox.appendChild(qrImage);
+
+        downloadLink.href = data.qrImage;
+        downloadLink.download = `qr_${channel}_${category}.png`;
+        downloadLink.style.display = "inline-block";
+
+        notifyBtn.style.display = "inline-block";
+        slipLabel.style.display = "inline-block";
+        slipNote.style.display = "block";
+      } else {
+        alert(data.error || "ไม่สามารถสร้าง QR Code ได้");
       }
-
-      const formData = new FormData();
-      formData.append("chat_id", chatId);
-      formData.append("caption", `📢 แจ้งโอน\n💸 ช่องทาง: ${channel}\n📁 แพ็กเกจ: ${category}\n💰 จำนวน: ${amount} บาท`);
-      formData.append("photo", file);
-
-      try {
-        const res = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-          method: "POST",
-          body: formData
-        });
-        const data = await res.json();
-        if (data.ok) {
-          alert("✅ แจ้งโอนสำเร็จ!");
-        } else {
-          alert("❌ ส่งไม่สำเร็จ: " + data.description);
-        }
-      } catch (err) {
-        alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อ Telegram API");
-        console.error(err);
-      }
+    } catch (err) {
+      alert("เกิดข้อผิดพลาดในการเชื่อมต่อ API");
+      console.error(err);
     }
-  </script>
+  }
+
+  async function notifyTelegram() {
+    const channel = document.getElementById('channel').value;
+    const category = document.getElementById('category').value;
+    const slipInput = document.getElementById('slipInput');
+    const file = slipInput.files[0];
+
+    if (!file) {
+      alert("⚠️ กรุณาแนบสลิปก่อนยืนยัน");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("chat_id", chatId);
+    formData.append("caption", `📢 แจ้งโอน\n💸 ช่องทาง: ${channel}\n📁 แพ็กเกจ: ${category}\n💰 จำนวน: ${finalAmount} บาท`);
+    formData.append("photo", file);
+
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      if (data.ok) {
+        alert("✅ แจ้งโอนสำเร็จ!");
+      } else {
+        alert("❌ ส่งไม่สำเร็จ: " + data.description);
+      }
+    } catch (err) {
+      alert("❌ เกิดข้อผิดพลาดในการเชื่อมต่อ Telegram API");
+      console.error(err);
+    }
+  }
+</script>
 </body>
 </html>
