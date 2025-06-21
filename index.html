@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="th">
+<!DOCTYPE html><html lang="th">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,47 +12,31 @@
     input, select, button { padding: 8px; margin: 5px 0; border-radius: 8px; border: 1px solid #ccc; }
   </style>
 </head>
-<body>
+<body><h2>📦 สั่งซื้อ VPN</h2><label>ช่องทางชำระเงิน:</label> <select id="channel">
 
-<h2>📦 สั่งซื้อ VPN</h2>
-
-<label>ช่องทางชำระเงิน:</label>
-<select id="channel">
   <option value="promptpay">PromptPay</option>
   <option value="truemoney">TrueMoney</option>
-</select><br>
+</select><br><label>เลือกแพ็กเกจ:</label> <select id="category">
 
-<label>เลือกแพ็กเกจ:</label>
-<select id="category">
   <option value="รายวัน">รายวัน</option>
   <option value="รายสัปดาห์">รายสัปดาห์</option>
   <option value="รายเดือน">รายเดือน</option>
-</select><br>
+</select><br><label>จำนวนเงิน (บาท):</label> <input type="number" id="customAmount" placeholder="ระบุจำนวน" style="width: 100px;"><br>
 
-<label>จำนวนเงิน (บาท):</label>
-<input type="number" id="customAmount" placeholder="ระบุจำนวน" style="width: 100px;"><br>
+<label>ใส่โค้ดส่วนลด (ถ้ามี):</label> <input type="text" id="discountCode" placeholder="เช่น VIP10">
 
-<label>ใส่โค้ดส่วนลด (ถ้ามี):</label>
-<input type="text" id="discountCode" placeholder="เช่น VIP10">
-<div id="discountResult"></div><br>
+<div id="discountResult"></div><br><button onclick="generateQR()">สร้าง QR / ชำระเงิน</button>
 
-<button onclick="generateQR()">สร้าง QR / ชำระเงิน</button>
 <div id="qrBox"></div>
 <a id="downloadLink" style="display:none;" target="_blank">ดาวน์โหลด QR</a>
-<br>
-
-<label id="slipLabel" style="display:none;">แนบสลิป:</label><br>
-<input type="file" id="slipInput" style="display:none;"><br>
-<small id="slipNote" style="display:none;">* รองรับเฉพาะไฟล์ภาพ .jpg .png</small><br>
+<br><label id="slipLabel" style="display:none;">แนบสลิป:</label><br> <input type="file" id="slipInput" style="display:none;"><br> <small id="slipNote" style="display:none;">* รองรับเฉพาะไฟล์ภาพ .jpg .png</small><br>
 
 <button id="notifyBtn" onclick="notifyTelegram()" style="display:none;">ยืนยันการชำระเงิน</button>
 
 <div id="receipt-confirmation">
   ✅ ขอบคุณ! รหัสใบเสร็จของคุณคือ: 
   <strong id="receipt-code-display" style="color:green;"></strong>
-</div>
-
-<script>
+</div><script>
   const promptpay = "0620167462";
   const walletUrl = "https://tmn.app.link/LqKi0gjq1Tb";
   const botToken = "ใส่โทเคนบอทของคุณ";
@@ -86,6 +69,7 @@
     const downloadLink = document.getElementById('downloadLink');
     const notifyBtn = document.getElementById('notifyBtn');
     const slipLabel = document.getElementById('slipLabel');
+    const slipInput = document.getElementById('slipInput');
     const slipNote = document.getElementById('slipNote');
     const customAmount = document.getElementById('customAmount');
     const discountInput = document.getElementById('discountCode').value.trim().toUpperCase();
@@ -96,6 +80,7 @@
     notifyBtn.style.display = "none";
     slipLabel.style.display = "none";
     slipNote.style.display = "none";
+    slipInput.style.display = "none";
 
     const inputAmount = parseFloat(customAmount.value);
     if (!isNaN(inputAmount)) amount = inputAmount;
@@ -134,6 +119,7 @@
       notifyBtn.style.display = "inline-block";
       slipLabel.style.display = "inline-block";
       slipNote.style.display = "block";
+      slipInput.style.display = "block";
       return;
     }
 
@@ -154,6 +140,7 @@
         notifyBtn.style.display = "inline-block";
         slipLabel.style.display = "inline-block";
         slipNote.style.display = "block";
+        slipInput.style.display = "block";
 
         const receiptCode = generateReceiptCode();
         document.getElementById("receipt-confirmation").style.display = "block";
@@ -200,7 +187,5 @@
       alert("เกิดข้อผิดพลาดขณะส่งสลิป");
     }
   }
-</script>
-
-</boawait/html>
-
+</script></body>
+</html>
