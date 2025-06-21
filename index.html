@@ -230,19 +230,22 @@
     // ตรวจสอบโค้ดส่วนลด
     finalAmount = amount;
     if (discountCodes[discountInput]) {
-      const { discount, expires } = discountCodes[discountInput];
-      const today = new Date().toISOString().split("T")[0];
-      if (today <= expires) {
-        finalAmount = Math.ceil(amount - (amount * discount / 100));
-        discountResult.innerText = `✅ โค้ด "${discountInput}" ลด ${discount}% เหลือ ${finalAmount} บาท`;
-      } else {
-        discountResult.innerText = `⚠️ โค้ด "${discountInput}" หมดอายุแล้ว`;
-      }
-    } else if (discountInput !== "") {
-      discountResult.innerText = `❌ โค้ด "${discountInput}" ไม่ถูกต้อง`;
-    } else {
-      discountResult.innerText = "";
-    }
+  const { discount, expires } = discountCodes[discountInput];
+  const today = new Date().toISOString().split("T")[0];
+  if (today <= expires) {
+    finalAmount = Math.ceil(amount - (amount * discount / 100));
+    discountResult.innerText = `✅ โค้ด "${discountInput}" ลด ${discount}% เหลือ ${finalAmount} บาท`;
+    discountResult.style.color = "#00e676"; // สีเขียว
+  } else {
+    discountResult.innerText = `⚠️ โค้ด "${discountInput}" หมดอายุแล้ว`;
+    discountResult.style.color = "#ffcc00"; // สีส้ม
+  }
+} else if (discountInput !== "") {
+  discountResult.innerText = `❌ โค้ด "${discountInput}" ไม่ถูกต้อง`;
+  discountResult.style.color = "#ff5252"; // สีแดง
+} else {
+  discountResult.innerText = "";
+}
 
     if (channel === 'truemoney') {
       presetContainer.style.display = 'none';
