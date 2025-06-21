@@ -1,1 +1,206 @@
-ควย
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VPN เช่าใช้งาน</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body { font-family: sans-serif; margin: 20px; background: #f4f4f4; }
+    .download-btn { padding: 10px 20px; background: #ff6600; color: white; border: none; border-radius: 10px; cursor: pointer; }
+    #qrBox { margin-top: 10px; }
+    #receipt-confirmation { margin-top: 20px; background: #d7ffd9; padding: 10px; border-radius: 10px; display: none; }
+    input, select, button { padding: 8px; margin: 5px 0; border-radius: 8px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+
+<h2>📦 สั่งซื้อ VPN</h2>
+
+<label>ช่องทางชำระเงิน:</label>
+<select id="channel">
+  <option value="promptpay">PromptPay</option>
+  <option value="truemoney">TrueMoney</option>
+</select><br>
+
+<label>เลือกแพ็กเกจ:</label>
+<select id="category">
+  <option value="รายวัน">รายวัน</option>
+  <option value="รายสัปดาห์">รายสัปดาห์</option>
+  <option value="รายเดือน">รายเดือน</option>
+</select><br>
+
+<label>จำนวนเงิน (บาท):</label>
+<input type="number" id="customAmount" placeholder="ระบุจำนวน" style="width: 100px;"><br>
+
+<label>ใส่โค้ดส่วนลด (ถ้ามี):</label>
+<input type="text" id="discountCode" placeholder="เช่น VIP10">
+<div id="discountResult"></div><br>
+
+<button onclick="generateQR()">สร้าง QR / ชำระเงิน</button>
+<div id="qrBox"></div>
+<a id="downloadLink" style="display:none;" target="_blank">ดาวน์โหลด QR</a>
+<br>
+
+<label id="slipLabel" style="display:none;">แนบสลิป:</label><br>
+<input type="file" id="slipInput" style="display:none;"><br>
+<small id="slipNote" style="display:none;">* รองรับเฉพาะไฟล์ภาพ .jpg .png</small><br>
+
+<button id="notifyBtn" onclick="notifyTelegram()" style="display:none;">ยืนยันการชำระเงิน</button>
+
+<div id="receipt-confirmation">
+  ✅ ขอบคุณ! รหัสใบเสร็จของคุณคือ: 
+  <strong id="receipt-code-display" style="color:green;"></strong>
+</div>
+
+<script>
+  const promptpay = "0620167462";
+  const walletUrl = "https://tmn.app.link/LqKi0gjq1Tb";
+  const botToken = "ใส่โทเคนบอทของคุณ";
+  const chatId = "ใส่แชทไอดีของคุณ";
+  let amount = 0;
+  let finalAmount = 0;
+
+  const discountCodes = {
+    "VIP10": { discount: 10, expires: "2025-12-31" },
+    "GAME20": { discount: 20, expires: "2025-12-31" },
+    "PRO50": { discount: 50, expires: "2025-12-31" }
+  };
+
+  document.getElementById('slipInput').addEventListener('change', function () {
+    document.getElementById('slipLabel').style.display = this.files.length > 0 ? 'block' : 'none';
+  });
+
+  function generateReceiptCode() {
+    const now = new Date();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    return `VPN${mm}${dd}-${randomNum}`;
+  }
+
+  async function generateQR() {
+    const channel = document.getElementById('channel').value;
+    const category = document.getElementById('category').value;
+    const qrBox = document.getElementById('qrBox');
+    const downloadLink = document.getElementById('downloadLink');
+    const notifyBtn = document.getElementById('notifyBtn');
+    const slipLabel = document.getElementById('slipLabel');
+    const slipNote = document.getElementById('slipNote');
+    const customAmount = document.getElementById('customAmount');
+    const discountInput = document.getElementById('discountCode').value.trim().toUpperCase();
+    const discountResult = document.getElementById('discountResult');
+
+    qrBox.innerHTML = "";
+    downloadLink.style.display = "none";
+    notifyBtn.style.display = "none";
+    slipLabel.style.display = "none";
+    slipNote.style.display = "none";
+
+    const inputAmount = parseFloat(customAmount.value);
+    if (!isNaN(inputAmount)) amount = inputAmount;
+
+    if (amount <= 0 || isNaN(amount)) {
+      alert("⚠️ กรุณาระบุจำนวนเงินให้ถูกต้อง");
+      return;
+    }
+
+    finalAmount = amount;
+    if (discountCodes[discountInput]) {
+      const { discount, expires } = discountCodes[discountInput];
+      const today = new Date().toISOString().split("T")[0];
+      if (today <= expires) {
+        finalAmount = Math.ceil(amount - (amount * discount / 100));
+        discountResult.innerText = `✅ โค้ด "${discountInput}" ลด ${discount}% เหลือ ${finalAmount} บาท`;
+        discountResult.style.color = "#00e676";
+      } else {
+        discountResult.innerText = `⚠️ โค้ด "${discountInput}" หมดอายุแล้ว`;
+        discountResult.style.color = "#ffcc00";
+      }
+    } else if (discountInput !== "") {
+      discountResult.innerText = `❌ โค้ด "${discountInput}" ไม่ถูกต้อง`;
+      discountResult.style.color = "#ff5252";
+    } else {
+      discountResult.innerText = "";
+    }
+
+    if (channel === 'truemoney') {
+      const walletButton = document.createElement('a');
+      walletButton.href = walletUrl;
+      walletButton.target = "_blank";
+      walletButton.innerHTML = `<button class='download-btn'><i class='fas fa-wallet'></i> เปิดแอป TrueMoney Wallet</button>`;
+      qrBox.appendChild(walletButton);
+
+      notifyBtn.style.display = "inline-block";
+      slipLabel.style.display = "inline-block";
+      slipNote.style.display = "block";
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://www.pp-qr.com/api/${promptpay}/${finalAmount}`);
+      const data = await response.json();
+      if (response.ok) {
+        const qrImage = document.createElement('img');
+        qrImage.src = data.qrImage;
+        qrImage.alt = "QR Code";
+        qrImage.style.cssText = "max-width: 100%; margin-top: 10px; border-radius: 10px;";
+        qrBox.appendChild(qrImage);
+
+        downloadLink.href = data.qrImage;
+        downloadLink.download = `qr_${channel}_${category}.png`;
+        downloadLink.style.display = "inline-block";
+
+        notifyBtn.style.display = "inline-block";
+        slipLabel.style.display = "inline-block";
+        slipNote.style.display = "block";
+
+        const receiptCode = generateReceiptCode();
+        document.getElementById("receipt-confirmation").style.display = "block";
+        document.getElementById("receipt-code-display").innerText = receiptCode;
+      } else {
+        alert(data.error || "ไม่สามารถสร้าง QR Code ได้");
+      }
+    } catch (err) {
+      alert("เกิดข้อผิดพลาดในการเชื่อมต่อ API");
+      console.error(err);
+    }
+  }
+
+  async function notifyTelegram() {
+    const channel = document.getElementById('channel').value;
+    const category = document.getElementById('category').value;
+    const slipInput = document.getElementById('slipInput');
+    const file = slipInput.files[0];
+
+    if (!file) {
+      alert("⚠️ กรุณาแนบสลิปก่อนยืนยัน");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("chat_id", chatId);
+    formData.append("caption", `📢 แจ้งโอน\n💸 ช่องทาง: ${channel}\n📁 แพ็กเกจ: ${category}\n💰 จำนวน: ${finalAmount} บาท`);
+    formData.append("photo", file);
+
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      if (data.ok) {
+        alert("✅ ส่งสลิปเรียบร้อยแล้ว!");
+      } else {
+        alert("❌ ไม่สามารถส่งสลิปได้");
+        console.log(data);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("เกิดข้อผิดพลาดขณะส่งสลิป");
+    }
+  }
+</script>
+
+</boawait/html>
+
