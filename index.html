@@ -104,9 +104,20 @@
       <option value="truemoney">TrueMoney Wallet</option>
     </select>
     <p>เลือกแพ็คเกจ VPN:</p>
-    <p>ใส่โค้ดส่วนลด (ถ้ามี):</p>
-<input type="text" id="discountCode" placeholder="กรอกโค้ดส่วนลด" />
-<p id="discountResult" style="color:#00e676; font-weight: bold;"></p>
+    <!-- กล่องกรอกโค้ดส่วนลด -->
+<div class="discount-box" style="margin: 15px 0; text-align: center;">
+  <label for="discountCode" style="font-weight: bold; font-size: 16px; display: block; margin-bottom: 5px;">
+    🔑 ใส่โค้ดส่วนลด (ถ้ามี)
+  </label>
+  <div style="display: flex; justify-content: center; gap: 10px;">
+    <input type="text" id="discountCode" placeholder="เช่น VIP10 / GAME20" 
+      style="padding: 10px 15px; width: 200px; border-radius: 10px; border: 2px solid #ccc; font-size: 16px; text-align: center;">
+    <button onclick="generateQR()" style="background: #4CAF50; color: white; border: none; padding: 10px 15px; font-size: 16px; border-radius: 10px; cursor: pointer;">
+      ✅ ใช้โค้ด
+    </button>
+  </div>
+  <div id="discountResult" style="margin-top: 10px; font-size: 15px; font-weight: bold; color: #333;"></div>
+</div>
     <select id="category">
       <option value="Aisทั่วไป">AIS 128k ทั่วไป</option>
       <option value="Aisสายเกมส์">AIS 128k สายเกมส์</option>
