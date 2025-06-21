@@ -127,15 +127,14 @@
     <label for="slipInput" id="slipLabel"><i class="fas fa-paperclip"></i> แนบสลิปแล้วยืนยันการโอน</label>
     <p id="slipSuccessMsg" style="color: #00e676; font-weight: bold;">✅ แนบสลิปเรียบร้อยกดยืนยันการโอน</p>
     <button id="notifyBtn" onclick="notifyTelegram()"><i class="fas fa-paper-plane"></i> ยืนยันการโอน</button>
-  </div>  <hr>
+  </div>
+  <hr>
   <div class="contact-box">
     <h2><i class="fas fa-file-download"></i> ติดต่อรับไฟล์ VPN</h2>
-    <div class="contact-box">
-  <h2><i class="fas fa-clock"></i> เวลาทำการของแอดมิน</h2>
-  <p>🕘 เปิดให้บริการทุกวัน</p>
-  <p>⏰ เวลา: <strong>09.00 – 22.00 น.</strong></p>
-  <p style="font-size: 0.95rem; color: #ccc;">สามารถโอนเงินและแนบสลิปไว้ได้ตลอด 24 ชม.</p>
-</div>
+    <h2><i class="fas fa-clock"></i> เวลาทำการของแอดมิน</h2>
+    <p>🕘 เปิดให้บริการทุกวัน</p>
+    <p>⏰ เวลา: <strong>09.00 – 22.00 น.</strong></p>
+    <p style="font-size: 0.95rem; color: #ccc;">สามารถโอนเงินและแนบสลิปไว้ได้ตลอด 24 ชม.</p>
     <p>หลังโอนเงิน กรุณาทักแอดมินเพื่อรับไฟล์ VPN</p>
     <a href="https://facebook.com/your_facebook_page" target="_blank">
       <button style="background:#3b5998;"><i class="fab fa-facebook-f"></i> ติดต่อผ่าน Facebook</button>
@@ -143,40 +142,33 @@
     <a href="https://lin.ee/your_line" target="_blank">
       <button style="background:#00c300;"><i class="fab fa-line"></i> ติดต่อผ่าน LINE</button>
     </a>
-  </div>  <hr>
+  </div>
+  <hr>
   <div style="max-width: 600px;">
     <h2 style="text-align:center;"><i class="fas fa-star"></i> รีวิวจากลูกค้า</h2>
     <div class="review-box"><strong>คุณบาส:</strong><br>ใช้งานดีมากครับ แอดมินตอบไว เซิร์ฟเวอร์ไม่หลุดเลย</div>
     <div class="review-box"><strong>คุณเมย์:</strong><br>เล่นเกมได้ลื่นขึ้นจริง ราคาถูก แนะนำเลย!</div>
     <div class="review-box"><strong>คุณตั้ม:</strong><br>เติมเงินแล้วส่งไฟล์ให้ไวมาก ใช้งานง่ายสุด ๆ</div>
-    <!-- ✅ ความน่าเชื่อถือ -->
-<hr>
-<div class="container" style="background: rgba(255,255,255,0.06); margin-top: 20px;">
-  <h2 style="text-align: center;">🔒 ความน่าเชื่อถือ</h2>
-  <p style="font-size: 1.1rem; margin: 10px 0;"><i class="fas fa-users"></i> มีผู้ใช้งานมากกว่า <strong>10,000 คน</strong></p>
-  <p style="font-size: 1.1rem; margin: 10px 0;"><i class="fas fa-clock"></i> เปิดให้บริการตั้งแต่ปี <strong>2021</strong></p>
-  <p style="font-size: 1.1rem; margin: 10px 0;"><i class="fas fa-check-circle"></i> เชื่อถือได้จากลูกค้ามากมาย</p>
-</div>
-  </div>  <script>
-  const hourNow = new Date().getHours();
-  if (hourNow < 9 || hourNow >= 22) {
-    alert("⏰ ขณะนี้อยู่นอกเวลาทำการของแอดมิน (09.00 – 22.00 น.)\nคุณยังสามารถโอนเงินและแนบสลิปไว้ได้เลย แล้วแอดมินจะตอบกลับเมื่อออนไลน์");
-  }
+    <hr>
+    <div class="container" style="background: rgba(255,255,255,0.06); margin-top: 20px;">
+      <h2 style="text-align: center;">🔒 ความน่าเชื่อถือ</h2>
+      <p style="font-size: 1.1rem; margin: 10px 0;"><i class="fas fa-users"></i> มีผู้ใช้งานมากกว่า <strong>10,000 คน</strong></p>
+      <p style="font-size: 1.1rem; margin: 10px 0;"><i class="fas fa-clock"></i> เปิดให้บริการตั้งแต่ปี <strong>2021</strong></p>
+      <p style="font-size: 1.1rem; margin: 10px 0;"><i class="fas fa-check-circle"></i> เชื่อถือได้จากลูกค้ามากมาย</p>
+    </div>
+  </div>
 
-  const promptpay = "0620167462";
-  const walletUrl = "https://tmn.app.link/LqKi0gjq1Tb";
-  const botToken = "7789309548:AAGmd136XvDL5MhMxIxPcGL3f5nwuT74ClM";
-  const chatId = "7894990684";
-  let amount = 0;
-
-  // ...ที่เหลือเหมือนเดิมทั้งหมด
-</script>
-  
+  <script>
     const promptpay = "0620167462";
     const walletUrl = "https://tmn.app.link/LqKi0gjq1Tb";
     const botToken = "7789309548:AAGmd136XvDL5MhMxIxPcGL3f5nwuT74ClM";
     const chatId = "7894990684";
     let amount = 0;
+
+    const hourNow = new Date().getHours();
+    if (hourNow < 9 || hourNow >= 22) {
+      alert("⏰ ขณะนี้อยู่นอกเวลาทำการของแอดมิน (09.00 – 22.00 น.)\nคุณยังสามารถโอนเงินและแนบสลิปไว้ได้เลย แล้วแอดมินจะตอบกลับเมื่อออนไลน์");
+    }
 
     document.getElementById('slipInput').addEventListener('change', function () {
       document.getElementById('slipSuccessMsg').style.display = this.files.length > 0 ? 'block' : 'none';
@@ -237,7 +229,7 @@
           const qrImage = document.createElement('img');
           qrImage.src = data.qrImage;
           qrImage.alt = "QR Code";
-          qrImage.style = "max-width: 100%; margin-top: 10px; border-radius: 10px;";
+          qrImage.style.cssText = "max-width: 100%; margin-top: 10px; border-radius: 10px;";
           qrBox.appendChild(qrImage);
 
           downloadLink.href = data.qrImage;
@@ -288,5 +280,6 @@
         console.error(err);
       }
     }
-  </script></body>
+  </script>
+</body>
 </html>
