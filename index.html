@@ -1,451 +1,97 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>โดเนท - สนับสนุนด้วยพร้อมเพย์</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .container:hover {
-            transform: translateY(-5px);
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-        }
-
-        .amount-section {
-            margin-bottom: 30px;
-        }
-
-        .amount-buttons {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .amount-btn {
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .amount-btn:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .amount-btn.active {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border-color: transparent;
-        }
-
-        .custom-amount {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            font-size: 1.1em;
-            text-align: center;
-            margin-bottom: 20px;
-            transition: border-color 0.3s ease;
-        }
-
-        .custom-amount:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .phone-input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            font-size: 1.1em;
-            text-align: center;
-            margin-bottom: 20px;
-            transition: border-color 0.3s ease;
-        }
-
-        .phone-input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .generate-btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 25px;
-            font-size: 1.2em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-bottom: 30px;
-        }
-
-        .generate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .generate-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .qr-section {
-            margin-top: 30px;
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
-
-        .qr-section.show {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        #qrcode {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .qr-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-        }
-
-        .qr-info p {
-            margin: 5px 0;
-            color: #333;
-        }
-
-        .error {
-            color: #e74c3c;
-            margin-top: 10px;
-            font-size: 0.9em;
-        }
-
-        .heart {
-            color: #e74c3c;
-            animation: heartbeat 1.5s ease-in-out infinite;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px;
-            }
-            
-            .amount-buttons {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            h1 {
-                font-size: 2em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fake Speed Test</title>
+  <style>
+    body {
+      background-color: #101010;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+    .box {
+      background: #1e1e1e;
+      border-radius: 20px;
+      padding: 40px;
+      display: inline-block;
+      box-shadow: 0 0 30px rgba(0,255,255,0.2);
+    }
+    .label {
+      font-size: 18px;
+      margin-top: 20px;
+      color: #aaa;
+    }
+    .value {
+      font-size: 40px;
+      font-weight: bold;
+      color: #00ffcc;
+    }
+    .unit {
+      font-size: 20px;
+      color: #00ccff;
+    }
+    button {
+      margin-top: 30px;
+      padding: 10px 30px;
+      font-size: 18px;
+      background: #00ccff;
+      color: black;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #00b0e0;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>💝 โดเนท</h1>
-        <p class="subtitle">สนับสนุนด้วย <span class="heart">❤️</span> ผ่านพร้อมเพย์</p>
-        
-        <div class="amount-section">
-            <h3 style="margin-bottom: 20px; color: #333;">เลือกจำนวนเงิน</h3>
-            <div class="amount-buttons">
-                <button class="amount-btn" onclick="selectAmount(20)">20 บาท</button>
-                <button class="amount-btn" onclick="selectAmount(50)">50 บาท</button>
-                <button class="amount-btn" onclick="selectAmount(100)">100 บาท</button>
-                <button class="amount-btn" onclick="selectAmount(200)">200 บาท</button>
-                <button class="amount-btn" onclick="selectAmount(500)">500 บาท</button>
-                <button class="amount-btn" onclick="selectAmount(1000)">1000 บาท</button>
-            </div>
-            
-            <input type="number" class="custom-amount" id="customAmount" placeholder="หรือใส่จำนวนเงินที่ต้องการ" min="1" max="50000" onchange="selectCustomAmount()">
-        </div>
+  <div class="box">
+    <h1>Speed Test</h1>
 
-        <div style="display: none;">
-            <input type="tel" class="phone-input" id="phoneNumber" placeholder="เบอร์โทรพร้อมเพย์ (เช่น 0891234567)" maxlength="10" value="0620167462">
-        </div>
+    <div class="label">Ping</div>
+    <div class="value" id="ping">-- <span class="unit">ms</span></div>
 
-        <button class="generate-btn" onclick="generateQR()">สร้าง QR Code</button>
+    <div class="label">Download</div>
+    <div class="value" id="download">-- <span class="unit">Mbps</span></div>
 
-        <div class="error" id="errorMsg"></div>
+    <div class="label">Upload</div>
+    <div class="value" id="upload">-- <span class="unit">Mbps</span></div>
 
-        <div class="qr-section" id="qrSection">
-            <h3 style="color: #333; margin-bottom: 15px;">📱 สแกน QR Code เพื่อโดเนท</h3>
-            <div id="qrcode"></div>
-            <div class="qr-info">
-                <p><strong>จำนวนเงิน:</strong> <span id="displayAmount"></span> บาท</p>
-                <p><strong>เบอร์โทร:</strong> <span id="displayPhone"></span></p>
-                <p style="margin-top: 15px; color: #666; font-size: 0.9em;">
-                    🙏 ขอบคุณสำหรับการสนับสนุน!<br>
-                    กรุณาสแกน QR Code ด้วยแอปธนาคารของคุณ
-                </p>
-            </div>
-        </div>
-    </div>
+    <button onclick="startTest()">เริ่มทดสอบ</button>
+  </div>
 
-    <script>
-        let selectedAmount = 0;
+  <script>
+    function animateValue(id, start, end, duration, unit) {
+      const obj = document.getElementById(id);
+      let startTime = null;
 
-        function selectAmount(amount) {
-            selectedAmount = amount;
-            document.getElementById('customAmount').value = '';
-            
-            // Update button styles
-            document.querySelectorAll('.amount-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            clearError();
+      function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        const value = (progress * (end - start) + start).toFixed(2);
+        obj.innerHTML = `${value} <span class="unit">${unit}</span>`;
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
         }
+      }
 
-        function selectCustomAmount() {
-            const customAmount = parseInt(document.getElementById('customAmount').value);
-            if (customAmount > 0) {
-                selectedAmount = customAmount;
-                
-                // Clear button selections
-                document.querySelectorAll('.amount-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-            }
-            clearError();
-        }
+      window.requestAnimationFrame(step);
+    }
 
-        function validatePhoneNumber(phone) {
-            // Remove all non-digits
-            phone = phone.replace(/\D/g, '');
-            
-            // Check if it's a valid Thai mobile number
-            if (phone.length === 10 && phone.startsWith('0')) {
-                return phone;
-            } else if (phone.length === 9 && !phone.startsWith('0')) {
-                return '0' + phone;
-            }
-            
-            return null;
-        }
-
-        function generatePromptPayPayload(phone, amount) {
-            // Using improved PromptPay payload generation
-            // Based on EMV QR Code specification for PromptPay
-            
-            // Format phone number (remove leading 0, add country code)
-            const formattedPhone = phone.startsWith('0') ? '66' + phone.substring(1) : phone;
-            
-            // Build the payload
-            let payload = '';
-            payload += '00020101'; // Payload format indicator
-            payload += '010212'; // Point of initiation method (12 = static)
-            
-            // Merchant account information
-            payload += '29'; // Tag 29 for PromptPay
-            payload += (15 + formattedPhone.length).toString().padStart(2, '0'); // Length
-            payload += '0016A000000677010111'; // PromptPay identifier
-            payload += formattedPhone.length.toString().padStart(2, '0') + formattedPhone;
-            
-            payload += '5303764'; // Transaction currency (764 = THB)
-            
-            // Transaction amount
-            const amountStr = amount.toFixed(2);
-            payload += '54' + amountStr.length.toString().padStart(2, '0') + amountStr;
-            
-            payload += '5802TH'; // Country code
-            payload += '6304'; // CRC placeholder
-            
-            // Calculate CRC16-CCITT
-            function crc16(data) {
-                let crc = 0xFFFF;
-                for (let i = 0; i < data.length; i++) {
-                    crc ^= data.charCodeAt(i) << 8;
-                    for (let j = 0; j < 8; j++) {
-                        if (crc & 0x8000) {
-                            crc = (crc << 1) ^ 0x1021;
-                        } else {
-                            crc = crc << 1;
-                        }
-                        crc &= 0xFFFF;
-                    }
-                }
-                return crc.toString(16).toUpperCase().padStart(4, '0');
-            }
-            
-            return payload + crc16(payload);
-        }
-
-        function generateQR() {
-            const phoneInput = document.getElementById('phoneNumber').value.trim();
-            
-            // Clear previous QR code
-            document.getElementById('qrcode').innerHTML = '';
-            document.getElementById('qrSection').classList.remove('show');
-            
-            // Validate inputs
-            if (selectedAmount <= 0) {
-                showError('กรุณาเลือกจำนวนเงิน');
-                return;
-            }
-            
-            if (selectedAmount > 50000) {
-                showError('จำนวนเงินต้องไม่เกิน 50,000 บาท');
-                return;
-            }
-            
-            // Use API to generate QR code
-            generateQRWithAPI(validPhone, selectedAmount);
-            
-        function generateQRWithAPI(phone, amount) {
-            // Option 1: Use promptpay.io API
-            const apiUrl = `https://promptpay.io/${phone}/${amount}.png`;
-            
-            // Create image element for QR code
-            const img = document.createElement('img');
-            img.src = apiUrl;
-            img.style.width = '250px';
-            img.style.height = '250px';
-            img.alt = 'PromptPay QR Code';
-            img.onload = function() {
-                document.getElementById('qrcode').innerHTML = '';
-                document.getElementById('qrcode').appendChild(img);
-                document.getElementById('displayAmount').textContent = amount.toLocaleString();
-                document.getElementById('displayPhone').textContent = phone;
-                document.getElementById('qrSection').classList.add('show');
-                clearError();
-            };
-            img.onerror = function() {
-                // Fallback to local generation
-                generateQRLocal(phone, amount);
-            };
-        }
-        
-        function generateQRLocal(phone, amount) {
-            try {
-                // Generate PromptPay payload locally
-                const payload = generatePromptPayPayload(phone, amount);
-                
-                // Generate QR Code
-                QRCode.toCanvas(document.createElement('canvas'), payload, {
-                    width: 250,
-                    height: 250,
-                    colorDark: '#000000',
-                    colorLight: '#ffffff',
-                    correctLevel: QRCode.CorrectLevel.M
-                }, function (error, canvas) {
-                    if (error) {
-                        showError('เกิดข้อผิดพลาดในการสร้าง QR Code');
-                        return;
-                    }
-                    
-                    document.getElementById('qrcode').innerHTML = '';
-                    document.getElementById('qrcode').appendChild(canvas);
-                    document.getElementById('displayAmount').textContent = amount.toLocaleString();
-                    document.getElementById('displayPhone').textContent = phone;
-                    document.getElementById('qrSection').classList.add('show');
-                    
-                    clearError();
-                });
-                
-            } catch (error) {
-                showError('เกิดข้อผิดพลาดในการสร้าง QR Code');
-            }
-        }
-        }
-
-        function showError(message) {
-            document.getElementById('errorMsg').textContent = message;
-        }
-
-        function clearError() {
-            document.getElementById('errorMsg').textContent = '';
-        }
-
-        // Format phone number input
-        document.getElementById('phoneNumber').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 10) {
-                value = value.substring(0, 10);
-            }
-            e.target.value = value;
-        });
-
-        // Allow Enter key to generate QR
-        document.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                generateQR();
-            }
-        });
-    </script>
+    function startTest() {
+      animateValue("ping", 50, 1.2, 1000, "ms");
+      setTimeout(() => {
+        animateValue("download", 0, 9876.54, 3000, "Mbps");
+      }, 800);
+      setTimeout(() => {
+        animateValue("upload", 0, 6543.21, 2500, "Mbps");
+      }, 1500);
+    }
+  </script>
 </body>
 </html>
