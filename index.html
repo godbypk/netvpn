@@ -1,97 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fake Speed Test</title>
-  <style>
-    body {
-      background-color: #101010;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 50px;
-    }
-    .box {
-      background: #1e1e1e;
-      border-radius: 20px;
-      padding: 40px;
-      display: inline-block;
-      box-shadow: 0 0 30px rgba(0,255,255,0.2);
-    }
-    .label {
-      font-size: 18px;
-      margin-top: 20px;
-      color: #aaa;
-    }
-    .value {
-      font-size: 40px;
-      font-weight: bold;
-      color: #00ffcc;
-    }
-    .unit {
-      font-size: 20px;
-      color: #00ccff;
-    }
-    button {
-      margin-top: 30px;
-      padding: 10px 30px;
-      font-size: 18px;
-      background: #00ccff;
-      color: black;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    button:hover {
-      background: #00b0e0;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>คอร์สสอนแกะไฟล์เน็ต VPN</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-  <div class="box">
-    <h1>Speed Test</h1>
+<body class="bg-gray-900 text-white font-sans">
 
-    <div class="label">Ping</div>
-    <div class="value" id="ping">-- <span class="unit">ms</span></div>
+  <header class="bg-gray-800 shadow p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">แกะเน็ต Academy</h1>
+      <a href="#join" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded text-white font-semibold">สมัครเรียน</a>
+    </div>
+  </header>
 
-    <div class="label">Download</div>
-    <div class="value" id="download">-- <span class="unit">Mbps</span></div>
+  <section class="container mx-auto text-center py-20">
+    <h2 class="text-4xl font-bold mb-4">คอร์สสอนแกะไฟล์เน็ต VPN แบบมือโปร</h2>
+    <p class="text-lg text-gray-300 mb-6">เรียนรู้การอ่านและแกะไฟล์ VPN เช่น .hc, .json, .ovpn, .ehi เพื่อเข้าใจเบื้องหลังการใช้งานเน็ตฟรี และสร้างไฟล์ VPN เองได้!</p>
+    <a href="#course" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full text-lg font-medium">ดูรายละเอียดคอร์ส</a>
+  </section>
 
-    <div class="label">Upload</div>
-    <div class="value" id="upload">-- <span class="unit">Mbps</span></div>
+  <section id="course" class="bg-gray-800 py-16">
+    <div class="container mx-auto px-4 grid md:grid-cols-2 gap-10">
+      <div>
+        <h3 class="text-3xl font-bold mb-4">เนื้อหาที่คุณจะได้เรียน</h3>
+        <ul class="list-disc list-inside text-gray-300 space-y-2">
+          <li>พื้นฐาน VPN, SSH, HTTP Custom</li>
+          <li>วิธีแกะไฟล์ .ehi, .hc, .json, .ovpn</li>
+          <li>เข้าใจ Header, Payload, SNI, Bug</li>
+          <li>วิธีทดสอบไฟล์และปรับใช้กับเน็ตมือถือ</li>
+          <li>เทคนิคการหาบั๊กเน็ตฟรีใหม่ๆ</li>
+        </ul>
+      </div>
+      <div>
+        <img src="https://cdn.pixabay.com/photo/2020/06/07/22/17/hacker-5270181_960_720.jpg" alt="VPN Hacking" class="rounded-xl shadow-lg">
+      </div>
+    </div>
+  </section>
 
-    <button onclick="startTest()">เริ่มทดสอบ</button>
-  </div>
+  <section id="join" class="py-20 text-center">
+    <h3 class="text-3xl font-bold mb-6">เริ่มเรียนวันนี้ – เข้าใจเน็ตฟรีแบบเจาะลึก</h3>
+    <p class="text-gray-400 mb-6">สมัครผ่าน Google Play Store หรือดูคอร์สตัวอย่างบน YouTube ได้เลย</p>
+    <div class="space-x-4">
+      <a href="https://play.google.com/store/apps/details?id=example.vpncourse" target="_blank" class="bg-green-500 hover:bg-green-600 px-6 py-3 rounded text-white text-lg">ดูใน Play Store</a>
+      <a href="https://www.youtube.com/watch?v=ตัวอย่าง" target="_blank" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded text-white text-lg">ดูตัวอย่างคอร์ส</a>
+    </div>
+  </section>
 
-  <script>
-    function animateValue(id, start, end, duration, unit) {
-      const obj = document.getElementById(id);
-      let startTime = null;
+  <footer class="bg-gray-800 p-6 text-center text-gray-500">
+    © 2025 แกะเน็ต Academy | ติดต่อ: Line @vpnclass
+  </footer>
 
-      function step(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const progress = Math.min((timestamp - startTime) / duration, 1);
-        const value = (progress * (end - start) + start).toFixed(2);
-        obj.innerHTML = `${value} <span class="unit">${unit}</span>`;
-        if (progress < 1) {
-          window.requestAnimationFrame(step);
-        }
-      }
-
-      window.requestAnimationFrame(step);
-    }
-
-    function startTest() {
-      animateValue("ping", 50, 1.2, 1000, "ms");
-      setTimeout(() => {
-        animateValue("download", 0, 9876.54, 3000, "Mbps");
-      }, 800);
-      setTimeout(() => {
-        animateValue("upload", 0, 6543.21, 2500, "Mbps");
-      }, 1500);
-    }
-  </script>
 </body>
 </html>
